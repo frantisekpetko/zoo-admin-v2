@@ -9,13 +9,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const tasks_module_1 = require("./tasks/tasks.module");
 const auth_module_1 = require("./auth/auth.module");
 const shared_module_1 = require("./shared/shared.module");
-const traits_module_1 = require("./traits/traits.module");
 const typeorm_config_1 = require("./config/typeorm.config");
-const choice_module_1 = require("./choice/choice.module");
-const story_module_1 = require("./story/story.module");
 const app_service_1 = require("./app.service");
 const nest_console_1 = require("@squareboat/nest-console");
 const serve_static_1 = require("@nestjs/serve-static");
@@ -35,12 +31,8 @@ AppModule = __decorate([
             }),
             typeorm_1.TypeOrmModule.forRoot(typeorm_config_1.typeOrmConfig),
             nest_console_1.ConsoleModule,
-            tasks_module_1.TasksModule,
             auth_module_1.AuthModule,
             shared_module_1.SharedModule,
-            traits_module_1.TraitsModule,
-            choice_module_1.ChoiceModule,
-            story_module_1.StoryModule,
             config_1.ConfigModule.forRoot({ envFilePath: `.${process.env.NODE_ENV}.env` }),
             animals_module_1.AnimalsModule,
             commands_module_1.CommandsModule,

@@ -6,8 +6,6 @@ import {
 } from '@nestjs/common';
 import { Command, CommandArguments, _cli } from '@squareboat/nest-console';
 import { getConnection, getRepository } from 'typeorm';
-import { Trait } from './entity/old/trait.entity';
-import { CreateTraitsDto } from './traits/dto/store-traits.dto';
 import * as fs from 'fs';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';

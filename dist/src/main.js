@@ -35,12 +35,12 @@ async function bootstrap() {
     const logger = new common_2.Logger('<Bootstrap>');
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     logger.log(process.version, 'NodeJS version');
-    logger.log((0, path_1.resolve)('../../frontend/dist'));
     app.enableCors({
         origin: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         credentials: true,
     });
+    await deleteData();
     await animalsData();
     await userSeeds();
     app.setGlobalPrefix('api');

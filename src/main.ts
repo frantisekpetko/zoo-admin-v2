@@ -20,32 +20,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   logger.log(process.version, 'NodeJS version');
 
-  logger.log(resolve('../../frontend/dist'));
+ 
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
 
-  //await deleteData();
+  await deleteData();
   await animalsData();
   await userSeeds();
-
-  /*
-  const fs = require('fs');
-  const testFolder = './src/entity';
-
-  fs.readdir(testFolder, (err, files) => {
-    files.forEach((file) => {
-      const name = testFolder + '/' + file;
-      if (!fs.statSync(name).isDirectory()) {
-        logger.log(file, 'file');
-      }
-    });
-
-    if (err) logger.error(err);
-  });
-  */
 
   app.setGlobalPrefix('api');
 
