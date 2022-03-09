@@ -21,9 +21,6 @@ interface Extlink {
     link: string;
 }
 
-//    extlinks?: Array<String> | null;
-
-
 interface AnimalDetailUpdate {
     name?: string;
     latinname?: string;

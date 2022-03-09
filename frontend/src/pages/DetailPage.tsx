@@ -1,27 +1,13 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useStoreActions, useStoreState } from '../store';
 import Navigation from '../components/common/Navigation';
 import Footer from '../components/common/Footer';
-import Content from '../components/common/Content';
 import styled from 'styled-components';
 import AnimalContent from '../components/AnimalContent';
-import Button from '@mui/material/Button';
-import { useHistory } from 'react-router-dom';
-import { Grid } from '@mui/material';
 import Head from "../components/Head";
 import BackButton from '../components/BackButton';
-/*
-const BackButton = styled(Button)`
-    position: relative;
-    left: 25%;
-    display: flex;
-    justify-content: flex-start;
-    align-content: center;
-    //margin-left: 35%;
-    margin-top: 1.5rem;
-`;
-*/
+
 const Image = styled.img`
     width: 20rem;
     height: 15rem;

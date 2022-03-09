@@ -6,26 +6,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import { FormControlLabel, FormGroup, Menu, MenuItem, Switch } from '@mui/material';
+import { Menu, MenuItem } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
-import { useStoreActions, useStoreState } from '../../store';
+import { useStoreActions} from '../../store';
 import { Link, useHistory } from 'react-router-dom';
-import FullscreenModal from '../FullscreenModal';
 
 export default function Navigation(props) {
-    const [auth, setAuth] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-    const [openFullsreenModal, setOpenFullscreenModal] = React.useState(false);
-
-    const handleClickOpenFullscreenModal = () => {
-        setOpenFullscreenModal(true);
-    };
-
-    const handleClickCloseFullscreenModal = () => {
-        setOpenFullscreenModal(false);
-    };
-
     const [open, setOpen] = React.useState(false);
 
     const handleFullscreenMenu = () => {
@@ -34,15 +21,8 @@ export default function Navigation(props) {
     };
 
     const logOut = useStoreActions((actions) => actions.user.logOut);
-    const username = useStoreState((state) => state.user.username);
-    //commands.log('username', username);
     const token = sessionStorage.getItem('accessToken');
-    //commands.log('accessToken', token, sessionStorage.getItem('accessToken'));
     const navigate = useHistory();
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAuth(event.target.checked);
-    };
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -91,14 +71,7 @@ export default function Navigation(props) {
                     </>
                 )}
             </div>
-            {openFullsreenModal && (
-                <FullscreenModal
-                    handleFullscreenMenu={handleFullscreenMenu}
-                    handleOpen={handleClickOpenFullscreenModal}
-                    handleClose={handleClickCloseFullscreenModal}
-                    open={openFullsreenModal}
-                />
-            )}
+    
             <AppBar
                 position="static"
                 style={token !== null ? { backgroundColor: 'darkolivegreen', color: 'white' } : { backgroundColor: 'darkolivegreen', color: 'white' }}
@@ -113,12 +86,7 @@ export default function Navigation(props) {
                         </Link>
                     </Typography>
 
-                    {/*<FormGroup>
-                        <FormControlLabel
-                            control={<Switch checked={auth} onChange={handleChange} aria-label="login switch" />}
-                            label={auth ? 'Logout' : 'Login'}
-                        />
-                    </FormGroup>*/}
+     
                     {token !== null ? (
                         <div>
                             <Link to={'/animals'} className={'customized-link'}>

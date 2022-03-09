@@ -26,14 +26,6 @@ export interface UserModel {
     removeTokenFromStorage: Action<UserModel>;
     saveTokenToStorage: Action<UserModel, string>;
     logOut: Action<UserModel>;
-    /*getTraits: Thunk<UserModel>;
-    setTraits: Action<UserModel, UserModel>
-    addTrait: Action<UserModel, UserModel>;
-    saveTrait: Thunk<UserModel, UserRequest>;
-    loading: boolean,
-    setLoading: Action<UserModel, boolean>,
-    error: unknown,
-    */
 }
 
 const user: UserModel = {
@@ -46,8 +38,6 @@ const user: UserModel = {
     signIn: thunk(async (actions, payload: UserRequest) => {
         const data = await Ajax.post('/auth/signin', payload);
         return data;
-        //actions.saveTokenToStorage(data.accessToken);
-        //actions.loadTokenToMemory();
     }),
     userLoading: false,
     setUserLoading: action((state, payload) => {

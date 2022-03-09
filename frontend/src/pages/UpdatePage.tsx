@@ -21,9 +21,6 @@ interface Extlink {
     link: string;
 }
 
-//    extlinks?: Array<String> | null;
-
-
 interface AnimalDetailUpdate {
     name?: string;
     latinname?: string;
@@ -258,16 +255,6 @@ function UpdatePage() {
                 console.log('id', id)
                 console.log('animal', animal);
 
-              
-
-                /*const values = {
-                    name: animal?.name,
-                    latinname: animal?.latinname,
-                    description: animal?.description,
-                    extlinks: extlinks
-
-                };*/
-
                 const { data }: any = await Ajax.get(`animals/${id}`);
                 const extlinks: string[] = data?.extlinks?.map(item => {
                     return item.link
@@ -279,13 +266,11 @@ function UpdatePage() {
                     tempExtlinks.push(item);
                 });
 
-                //delete data.extlinks;
+
                 data.extlinks = [...extlinks];
                 console.log('data',data);
                 setFormValues({...data});
-                //animalRef.current = { ...values };
-                console.log('ref', animalRef.current)
-                //setAnimal({ ...values });
+
                 setExtlinks([...tempExtlinks]);
              
             }
@@ -304,7 +289,7 @@ function UpdatePage() {
         let tempData:any = { ...formValues };
         tempData?.extlinks?.push('');
         setFormValues({ ...tempData });
-        //setData({...tempData });
+
         console.log('tempData', tempData);
 
         setExtlinks((previousState) => [...previousState, '']);
@@ -313,7 +298,6 @@ function UpdatePage() {
     function removeExtlink(id) {
         let tempData: any | null = { ...formValues};
         const values = tempData?.extlinks?.filter((item, index) => {
-            //const idx = tempData?.extlinks?.indexOf(item);
             return id !== index;
         });
         console.log('values', values)

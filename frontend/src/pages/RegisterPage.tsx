@@ -4,17 +4,11 @@ import styled from 'styled-components';
 import { useHistory, Link } from 'react-router-dom';
 import { Grid, Paper, Button } from '@mui/material';
 import ErrorMessage from '../components/ErrorMessage';
-import StarfieldAnimation from 'react-starfield-animation';
-import Box from '@mui/material/Box';
 import Navigation from 'src/components/common/Navigation';
 import { useStoreActions, useStoreState } from '../store';
 import SuccessMessage from '../components/SuccessMessage';
-import { Shift } from 'ambient-cbg';
 import Head from '../components/Head';
 import Content from '../components/common/Content';
-import InputAdornment from '@mui/material/InputAdornment';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Footer from '../components/common/Footer';
 
 const Heading = styled.h1`

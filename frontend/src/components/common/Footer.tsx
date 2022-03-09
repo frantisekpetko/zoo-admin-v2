@@ -1,11 +1,9 @@
-import React from 'react';
 import styled from 'styled-components';
 
 const FooterElement = styled.footer`
     border-top: solid #c0c0c0 medium;
     width: 100%;
     background-color: darkolivegreen;
-
     height: 125px;
     //background-color: #64aa66;
     //color: #c0c0c0;

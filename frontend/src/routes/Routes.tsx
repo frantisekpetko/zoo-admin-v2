@@ -12,7 +12,7 @@ import CreatePage from '../pages/CreatePage';
 
 const Routes = () => {
     const isAuth = sessionStorage.getItem('accessToken');
-    console.log('isAuth', isAuth);
+
     return (
         <Switch>
             <Route exact path="/" render={(props) => (isAuth !== null ? <HomePage /> : <OpeningPage />)} />
@@ -25,7 +25,6 @@ const Routes = () => {
                         <Redirect
                             to={{
                                 pathname: '/',
-                                //state: { from: props.location }
                             }}
                         />
                     ) : (

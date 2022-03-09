@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Navigation from '../components/common/Navigation';
 import styled from 'styled-components';
-import { List } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import io from 'socket.io-client';
 import Footer from '../components/common/Footer';
 import { useHistory } from 'react-router-dom';
 
 import SearchField from 'react-search-field';
-
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import DirectionsIcon from '@mui/icons-material/Directions';
 
 import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
@@ -24,7 +14,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { Link } from 'react-router-dom';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';

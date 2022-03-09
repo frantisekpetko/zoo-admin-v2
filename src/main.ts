@@ -59,7 +59,6 @@ async function animalsData() {
   );
 
   for (const _animal of animalsObj) {
-    //const index = animalsObj.indexOf(_animal);
     const animal = new Animal();
     animal.name = _animal.name;
     animal.latinname = _animal.latinname;
@@ -71,10 +70,7 @@ async function animalsData() {
       await image.save();
     } catch (e) {}
 
-    //await conn.manager.save(image);
-
     animal.images = [image];
-    //console.log(animal.images);
     animal.extlinks = [];
 
     for (const extlink of _animal.extlinks) {
@@ -84,11 +80,9 @@ async function animalsData() {
         await extLink.save();
       } catch (e) {}
 
-      //await conn.manager.save(extLink);
       animal.extlinks.push(extLink);
     }
-    //console.log(animal.extlinks);
-    //await conn.manager.save(animal);
+
     try {
       await animal.save();
     } catch (e) {}

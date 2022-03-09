@@ -1,9 +1,5 @@
-import React from 'react';
 import { Action, Thunk, action, thunk } from 'easy-peasy';
 import Ajax from 'src/tools/Ajax';
-import { useHistory } from 'react-router-dom';
-
-
 
 interface Animal {
     id: number;
