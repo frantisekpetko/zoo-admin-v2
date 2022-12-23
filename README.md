@@ -1,6 +1,6 @@
-<p align="center" style="font-size: 2rem">
+<h1 align="center" style="font-size: 3rem">
   Zoo Admin Remaster
-</p>
+</h1>
 
 ## Description
 
@@ -13,7 +13,7 @@ $ npm install
 $ npm run db:refresh
 ```
 
-## Running the App
+## Running the App (Frontend & Backend)
 
 ```bash
 # development
@@ -23,12 +23,13 @@ $ npm run start:dev
 And after visit http://localhost:7000/
 ```
 
-## Running the frontend
+## Running the Frontend
 
 ```bash
 # development
 $ cd frontend && npm install
 $ npm vite-dev
+And after visit http://localhost:4000/
 
 # preview
 $ cd frontend && npm install
