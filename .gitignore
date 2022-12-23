@@ -4,7 +4,7 @@
 /dist
 data/database.sqlite
 /frontend/.idea
-/frontend/dist
+#/frontend/dist
 
 /frontend/.vscode
 /frontend/.vs
