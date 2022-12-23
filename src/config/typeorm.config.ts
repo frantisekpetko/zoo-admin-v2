@@ -1,11 +1,10 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { root } from './paths';
 
-console.log('Root ' + root + '/../../animals.js');
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'sqlite',
-  database: root + `/data/database.sqlite`,
+  database: process.cwd() + `/data/database.sqlite`,
   logging: true,
   autoLoadEntities: true,
   synchronize: true,

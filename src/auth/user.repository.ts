@@ -25,7 +25,7 @@ export class UserRepository extends Repository<User> {
     //commands.log(user.password);
     try {
       await user.save();
-    } catch (error) {
+    } catch (error: any) {
       if (error.errno === 19) {
         //duplicate username
         throw new ConflictException('Username already exists');

@@ -16,7 +16,7 @@ import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: root + '/../../frontend/dist',
+      rootPath: root + '/project/../../frontend/dist',
       exclude: ['/api*'],
     }),
     TypeOrmModule.forRoot(typeOrmConfig),

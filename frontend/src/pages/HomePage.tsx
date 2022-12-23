@@ -6,6 +6,7 @@ import Navigation from '../components/common/Navigation';
 import { Grid } from '@mui/material';
 import Footer from '../components/common/Footer';
 import Content from '../components/common/Content';
+import { Heading } from 'src/components/Heading';
 
 const Container = styled.div`
     background-color: white;
@@ -17,18 +18,18 @@ function HomePage() {
 
 
     return (
-      <Container>
+      <>
           <Head title={'Zoo Admin'} />
           <Navigation />
-          <>
+          
               <Content>
-                  <h2 className={'heading'}>
+                  <Heading>
                       Hey, You are logged in !
-                  </h2>
+                  </Heading>
               </Content>
-          </>
+          
           <Footer />
-      </Container>
+      </>
     );
 }
 

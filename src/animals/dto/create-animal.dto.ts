@@ -17,10 +17,10 @@ export class CreateAnimalDto {
 
   @IsNotEmpty()
   description: string;
-  /*
+  
   @IsNotEmpty()
-  images: Express.Multer.File | Array<Express.Multer.File>;
-  */
+  image: string;
+  
 
   @IsUrl()
   @IsArray()

@@ -1,59 +1,68 @@
-import TextField from '@mui/material/TextField';
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
-import { Grid, Paper, Button } from '@mui/material';
-import ErrorMessage from '../components/ErrorMessage';
-import StarfieldAnimation from 'react-starfield-animation';
-import Box from '@mui/material/Box';
-import Navigation from 'src/components/common/Navigation';
-import { useStoreActions, useStoreState } from '../store';
-import SuccessMessage from '../components/SuccessMessage';
-import Timeout = NodeJS.Timeout;
-import { Shift } from 'ambient-cbg';
-import Head from '../components/Head';
-import Content from '../components/common/Content';
-import Footer from '../components/common/Footer';
-
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Lock } from '@mui/icons-material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { Button, Grid, Paper } from '@mui/material';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import React, { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Content from 'src/components/common/Content';
+import Footer from 'src/components/common/Footer';
+import Navigation from 'src/components/common/Navigation';
+import ErrorMessage from 'src/components/ToastErrorMessage';
+import Head from 'src/components/Head';
+import ToastErrorMessage from 'src/components/ToastErrorMessage';
+import { useStoreActions, useStoreState } from 'src/store';
+import styled from 'styled-components';
+import Ajax from 'src/tools/Ajax';
+
 
 const Heading = styled.h1`
     margin-top: 0;
     color: black;
+    text-align: center;
 `;
 
-const FormContainer = styled.div`
+export const FormContainer = styled.div`
     max-width: 450px;
-    margin-bottom: 4rem;
+    padding: 1em;
     border-radius: 5px;
-    margin-left: 2rem;
-    margin-right: 2rem;
+
 `;
 
 const FormField = styled(TextField)`
     width: 100%;
 `;
-const PaperItem = styled(Paper)`
-    padding: 2rem;
-    //background-color: #ACE500;
-    background-color: goldenrod;
-`;
-const GridCenterItem = styled(Grid)`
-    width: 100vw;
-    margin-top: 7.5rem;
+
+
+const ErrorList = styled.ul`
+
+    padding-left: 0.5em;
+    margin: 0.5em;
+    
 `;
 
-const CustomizedButton = styled(Button)`
-    margin-bottom: 2rem;
-    width: 100%;
-    background-color: purple !important;
-    color: white !important;
-`;
+type constraint = string[] | { response: { message: string } } | { response: { message: string[] } };
+
+const renderMessageArray = (errors: any) => {
+    console.log('errors', errors);
+    let constraints: any = null;
+    if (Array.isArray(errors)) {
+        constraints = errors.map((constraint, idx) => <li key={idx}>{constraint}</li>);
+        //commands.log('Array.isArray(errors)')
+    }
+    if (errors.hasOwnProperty('response') && errors.response.hasOwnProperty('message') && typeof errors.response.message == 'string') {
+        constraints = <li>{errors.message}</li>;
+        //commands.log('errors.hasOwnProperty(\'response\') && errors.response.hasOwnProperty(\'message\') && typeof errors.response.message == \'string\'')
+    }
+
+    if (errors.hasOwnProperty('response') && errors.response.hasOwnProperty('message') && Array.isArray(errors.response.message)) {
+        constraints = errors.response.message.map((constraint: string, idx: number) => <li key={idx}>{constraint}</li>);
+        //commands.log('errors.hasOwnProperty(\'response\') && errors.response.hasOwnProperty(\'message\') && Array.isArray(errors.response.message)')
+    }
+
+    return constraints;
+};
 
 const LoginPage: FC = (props: any) => {
     const signIn = useStoreActions((actions) => actions.user.signIn);
@@ -65,42 +74,62 @@ const LoginPage: FC = (props: any) => {
 
     const token = useStoreState((state) => state.user.accessToken);
 
+    let controller = useRef<AbortController | null>(null);
+
     const navigate = useHistory();
 
     useEffect(() => {
         //document.body.style.backgroundColor = '#b8860b';
-        document.body.style.backgroundColor = '#FAFAD2';
+        //document.body.style.backgroundColor = '#FAFAD2';
         //setLoading(true);
 
         return () => {
             document.body.style.backgroundColor = '';
+            controller.current?.abort();
         };
     }, []);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [loading, setLoading] = useState(false);
+
+
+
+
 
     const submit = async () => {
-        setErrorMsg(null);
 
+
+        
         try {
-            const data = await signIn({ username, password });
-            console.log('data', data.data.accessToken);
-            setLoading(true);
-            save(data.data.accessToken);
-            setUserUsername(data.data.username);
-            load();
-            setLoading(false);
-            window.location.reload();
-            navigate.push('/');
-            console.log('token', token);
-        } catch (error: any) {
-            console.log('errorMessage', error);
-            const errorMessage = error.response.data.message;
+            let data = await signIn({ username, password });
 
-            setErrorMsg(errorMessage);
+            save(data.data?.data?.accessToken);
+            setUserUsername(data.data?.data?.username);
+            load();
+
+        }
+        catch(error: any) {
+                toast.dismiss();
+                console.log('errorMessage', error);
+                const message = error.response.data.message;
+                toast.error((
+                    <ToastErrorMessage message={message} />
+                ), {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: "colored",
+                    icon: false
+
+                });
+        }
+        finally {
+            if (sessionStorage.getItem('accessToken') !== null) {
+                navigate.replace('/');
+            }
         }
     };
 
@@ -108,16 +137,28 @@ const LoginPage: FC = (props: any) => {
         navigate.push('/register');
     }
 
+    const ENTER_KEY = 13;
+
+
+    const onEnterHandler = useCallback((event) => {
+        const isEnterPressed = event.which === ENTER_KEY
+            || event.keyCode === ENTER_KEY;
+
+        if (isEnterPressed) {
+            submit();
+        }
+
+    }, [submit]);
+
     return (
-        <React.Fragment>
+        <>
             <Head title={'Login Page'} />
-            {errorMsg && <ErrorMessage errors={errorMsg} />}
+
             <Navigation />
             <Content>
                 <FormContainer>
-                    <Heading>Uživatelský login</Heading>
+                    <Heading>User Login</Heading>
                     <FormField
-                        id="outlined-name"
                         label="Username"
                         margin="dense"
                         variant="filled"
@@ -129,10 +170,11 @@ const LoginPage: FC = (props: any) => {
                                     <AccountCircleOutlinedIcon />
                                 </InputAdornment>
                             ),
+                            'aria-label': 'theme'
                         }}
+                        onKeyUp={onEnterHandler}
                     />
                     <FormField
-                        id="outlined-name"
                         label="Password"
                         margin="dense"
                         variant="filled"
@@ -145,7 +187,9 @@ const LoginPage: FC = (props: any) => {
                                     <LockOutlinedIcon />
                                 </InputAdornment>
                             ),
+                            'aria-label': 'theme'
                         }}
+                        onKeyUp={onEnterHandler}
                     />
                     <Button color="inherit" fullWidth onClick={submit}>
                         Login in
@@ -157,7 +201,7 @@ const LoginPage: FC = (props: any) => {
                 </FormContainer>
             </Content>
             <Footer />
-        </React.Fragment>
+        </>
     );
 };
 

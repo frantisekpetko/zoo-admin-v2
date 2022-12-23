@@ -1,18 +1,28 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "incremental": true,
-    "resolveJsonModule": true,
-    "rootDir": "./",
-    "module": "commonjs",
-    "esModuleInterop": true
+  "strict": true,
+  "module": "commonjs",
+  "declaration": true,
+  "removeComments": true,
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true,
+  "allowSyntheticDefaultImports": true,
+  "target": "es2017",
+  "sourceMap": true,
+  "outDir": "./dist",
+  "baseUrl": "./",
+  "incremental": true,
+  "skipLibCheck": true,
+  "strictNullChecks": false,
+  "noImplicitAny": false,
+  "strictBindCallApply": false,
+  "forceConsistentCasingInFileNames": true,
+  "noFallthroughCasesInSwitch": false,
+  "paths": {
+    "@/*": [
+      "src/*"
+    ]
+  }
+
   }
 }

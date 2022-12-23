@@ -27,7 +27,6 @@ export class AnimalsService {
   }
 
   findOne(id: number): Promise<Animal> {
-    this.logger.log(`This action returns a #${id} animal`);
     return this.animalRepository.findOne(+id);
   }
 

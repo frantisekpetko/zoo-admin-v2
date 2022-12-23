@@ -1,8 +1,20 @@
 import { Fragment } from 'react';
 import ContentLoader from 'react-content-loader';
+import styled from 'styled-components';
 
 import { Grid } from '@mui/material';
 import Content from './common/Content';
+
+const ContentLoaderGrid = styled(Grid)`
+  min-height: 25rem;
+  max-height: 25rem !important;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  border: none !important;
+  margin-top: -8rem !important;
+`
 
 const CardLoader = (props) => {
     const width = 600;
@@ -29,7 +41,7 @@ const CardLoader = (props) => {
                 ) : (
                     <Grid container spacing={10} style={{ paddingLeft: 100, paddingRight: 50 }}>
                         {props.animals.map((_, id) => (
-                            <Grid item xs={12} sm={6} lg={4} xl={3} className="pb-3-5 card-content styled-grid=loader" key={id}>
+                            <ContentLoaderGrid item xs={12} sm={6} lg={4} xl={3} key={id}>
                                 <ContentLoader
                                     speed={3}
                                     width={width + 300}
@@ -44,7 +56,7 @@ const CardLoader = (props) => {
                                     <rect x="58" y="34" rx="2" ry="2" width="140" height="10" />
                                     <rect x="0" y="60" rx="2" ry="2" width={width} height={height } />
                                 </ContentLoader>
-                            </Grid>
+                            </ContentLoaderGrid>
                         ))}
                     </Grid>
                 )}

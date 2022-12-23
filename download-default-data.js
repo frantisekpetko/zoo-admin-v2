@@ -131,10 +131,3 @@ async function createAnimalJSONfile() {
   //animalsLength();
 })().catch((e) => console.error(e));
 
-function animalsLength() {
-  const animalsObj = JSON.parse(
-    fs.readFileSync(resolve('./src/data/seed/animals/animals.json'), 'utf8'),
-  );
-
-  console.log(animalsObj.length);
-}

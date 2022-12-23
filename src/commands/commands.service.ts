@@ -202,7 +202,7 @@ export class CommandsService {
       _cli.info(_animal.image);
       try {
         await image.save();
-      } catch (e) {
+      } catch (e: any) {
         _cli.error(e);
       }
 
@@ -217,7 +217,7 @@ export class CommandsService {
         extLink.link = extlink;
         try {
           await extLink.save();
-        } catch (e) {
+        } catch (e: any) {
           _cli.error(e);
         }
 
@@ -228,7 +228,7 @@ export class CommandsService {
       //await conn.manager.save(animal);
       try {
         await animal.save();
-      } catch (e) {
+      } catch (e: any) {
         _cli.error(e);
       }
     }
@@ -250,7 +250,7 @@ export class CommandsService {
     try {
       await user.save();
       _cli.success('success');
-    } catch (error) {
+    } catch (error: any) {
       if (error.errno === 19) {
         throw new ConflictException('Username already exists');
       } else {

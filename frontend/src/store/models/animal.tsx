@@ -97,7 +97,7 @@ const animal: AnimalModel = {
         const { data } = await Ajax.get('/animals/pages', {
             params: {
                 limit: payload.limit,
-                search: payload.search,
+                search: payload.search
             },
         });
         actions.setPages(data);
@@ -110,10 +110,11 @@ const animal: AnimalModel = {
             params: {
                 page: payload.page,
                 limit: payload.limit,
-                search: payload.search,
+                search: payload.search
             },
         });
         actions.setAnimals(data);
+        console.log('animals', data)
         return data;
     }),
     setUpdateAnimal: action((state, payload) => {
@@ -187,3 +188,4 @@ const animal: AnimalModel = {
 };
 
 export default animal;
+//

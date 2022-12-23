@@ -1,79 +1,75 @@
 import TextField from '@mui/material/TextField';
-import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useHistory, Link } from 'react-router-dom';
-import { Grid, Paper, Button } from '@mui/material';
-import ErrorMessage from '../components/ErrorMessage';
+import { useHistory } from 'react-router-dom';
+import { Button } from '@mui/material';
 import Navigation from 'src/components/common/Navigation';
-import { useStoreActions, useStoreState } from '../store';
-import SuccessMessage from '../components/SuccessMessage';
+import { useStoreActions } from '../store';
 import Head from '../components/Head';
 import Content from '../components/common/Content';
 import Footer from '../components/common/Footer';
+import { toast } from 'react-toastify';
+import ToastErrorMessage from 'src/components/ToastErrorMessage';
 
 const Heading = styled.h1`
     margin-top: 0;
+    text-align: center;
 `;
 
 const FormContainer = styled.div`
     max-width: 450px;
-    margin-bottom: 4rem;
     border-radius: 5px;
+    padding: 1em;
 `;
 
 const FormField = styled(TextField)`
     width: 100%;
 `;
 
-const PaperItem = styled(Paper)`
-    padding: 2rem;
-    background-color: #ace500;
-`;
-const GridCenterItem = styled(Grid)`
-    width: 100vw;
-    height: 100vh;
-`;
-
-const CustomizedButton = styled(Button)`
-    margin-bottom: 2rem;
-    width: 100%;
-    background-color: purple !important;
-    color: white !important;
-`;
 
 const RegisterPage: FC = (props: any) => {
     const signUp = useStoreActions((actions) => actions.user.signUp);
 
-    const load = useStoreActions((actions) => actions.user.loadTokenToMemory);
-    const save = useStoreActions((actions) => actions.user.saveTokenToStorage);
-
-    //const loading = useStoreState((state) => state.trait.loading);
-
     const navigate = useHistory();
-
-    useEffect(() => {
-        document.body.style.backgroundColor = '#b8860b';
-        return () => {
-            document.body.style.backgroundColor = '';
-        };
-    });
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [errorMsg, setErrorMsg] = useState(null);
-    const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
 
     const submit = async () => {
-        setErrorMsg(null);
 
         try {
             await signUp({ username, password });
-            setSuccessMsg('You are registered!');
-        } catch (error: any) {
-            console.log('errorMessage', error);
-            const errorMessage = error.response.data.message;
 
-            setErrorMsg(errorMessage);
+            toast.success('You are registered!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                icon: false
+
+            });
+
+        } catch (error: any) {
+            //console.log('errorMessage', error);
+            const errorMessage = error.response.data.message;
+            toast.error((
+                <ToastErrorMessage message={errorMessage} />
+            ), {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "colored",
+                icon: false
+
+            });
+
         }
     };
 
@@ -84,14 +80,11 @@ const RegisterPage: FC = (props: any) => {
     return (
         <React.Fragment>
             <Head title={'Register Page'} />
-            {errorMsg && <ErrorMessage errors={errorMsg} />}
-            {successMsg && <SuccessMessage message={successMsg} />}
             <Navigation />
             <Content>
                 <FormContainer>
-                    <Heading>Uživatelská Registrace</Heading>
+                    <Heading>User Registration</Heading>
                     <FormField
-                        id="outlined-name"
                         label="Username"
                         margin="dense"
                         variant="filled"
@@ -99,7 +92,6 @@ const RegisterPage: FC = (props: any) => {
                         onChange={(e) => setUsername(e.target.value)}
                     />
                     <FormField
-                        id="outlined-name"
                         label="Password"
                         margin="dense"
                         variant="filled"

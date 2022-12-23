@@ -27,7 +27,7 @@ export class UpdateAnimalDto {
   description: string;
   
   @IsNotEmpty()
-  images: Image[];
+  image: string;
 
   @IsUrl()
   @IsArray()

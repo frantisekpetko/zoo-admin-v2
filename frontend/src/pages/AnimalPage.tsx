@@ -1,33 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import Navigation from '../components/common/Navigation';
-import styled from 'styled-components';
-import 'react-virtualized/styles.css';
-import Footer from '../components/common/Footer';
+import { useState, useEffect } from 'react';
+
+import _SearchField from 'src/vendor/SearchField';
+import Flex from 'src/components/Flex';
+import Navigation from 'src/components/common/Navigation';
+import Footer from 'src/components/common/Footer';
+import Content from 'src/components/common/Content';
+import ContenLoader from 'src/components/ContentLoader';
+import Head from "src/components/Head";
+
+import { useStoreActions, useStoreState } from 'src/store';
+
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
 
-import SearchField from 'react-search-field';
-
-import Pagination from '@mui/material/Pagination';
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Grid from '@mui/material/Grid';
+import { 
+    Box, 
+    CardMedia, 
+    Pagination, 
+    Typography, 
+    CardActions, 
+    CardContent, 
+    Button, 
+    Grid, 
+    Card 
+} from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fab } from '@fortawesome/free-brands-svg-icons';
-import { Box, CardMedia } from '@mui/material';
-import { useStoreActions, useStoreState } from '../store';
-import Content from '../components/common/Content';
-import ContenLoader from 'src/components/ContentLoader';
-import Head from "../components/Head";
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import EditIcon from '@mui/icons-material/Edit';
 
 library.add(fab, faChevronRight, faTrash);
+
+
+const CustomizedCard = styled(Card)`
+    min-height: 24em;
+`
+
+const SearchField = styled(_SearchField)`
+    margin-top: 2rem;
+    width: 100vw;
+    color: black;
+`
+
+const SearchFieldContainer = styled(Box)`
+    width: 100%;
+    display: flex;
+    justify-content: center;    
+    padding: 0 50px;
+    height: 70px;
+    z-index: 1000;
+    margin-top: 20px;
+`
 
 const Icon = styled(FontAwesomeIcon)`
     margin-left: 0.5rem;
@@ -50,82 +76,23 @@ const UpdateButton = styled(Button)`
     color: green !important;
 `;
 
-const FinalContainer = styled.div`
-    width: 100%;
-    opacity: 0.7;
-    height: calc(100% - 115px);
+const NoData = styled.div`
 
-    display: flex;
-    content-align: flex-end;
-    align-items: flex-end;
-    align-content: flex-end;
-`;
+    font-size: 2rem; 
+`
 
-const InputContainer = styled.div`
-    position: fixed;
-    bottom: 0;
-    //background: transparent url(images/email-field-1.png) 100% no-repeat;
-    background-size: cover;
-    height: 100px;
-    background-size: 100% 100px;
-    display: flex;
-    content-align: center;
-    align-items: center;
-    width: 100%;
-    align-content: flex-end;
-    &:hover ${this} {
-        border: 0px solid black;
-        background-size: cover;
-        background-size: 100% 100px;
-    }
-    margin-bottom: 1rem;
-`;
+const AnimalsGrid = styled(Grid)`
+    padding-left: 50px;
+    padding-right: 50px;
+`
 
-const InputWindow = styled.input`
-    opacity: 1;
-    background-color: #353839;
-    width: 95%;
-    height: 50px;
-    background-size: 100% 100px;
-    background-repeat: no-repeat;
-    color: white;
-    box-sizing: border-box;
-    border-radius: 5px;
-    outline: grey solid 2px;
-    display: inline-block;
-    align-self: flex-end;
-    border: none;
 
-    padding: 0.875rem;
-    margin: 0 auto;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+const EmptyCardContent = styled.div`
+    color: #1d9d74;
+    height: 194px;
+    font-size: 12em;
+`
 
-    background-clip: padding-box;
-    line-height: 1.7;
-    font-size: 1.1875rem;
-    -webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    overflow: visible;
-
-    &:hover ${this} {
-        border: 0px solid black;
-        //background: transparent url(images/email-field-1-outline.png) 50% no-repeat;
-        background-size: cover;
-        background-size: 100% 100px;
-        outline: grey solid 2px;
-    }
-
-    &:focus ${this} {
-        border: 0px solid black;
-        outline: none;
-        outline: grey solid 2px;
-        box-shadow: none;
-        //background-color: hsla(0, 0%, 100%, .1);
-    }
-
-    &:after ${this} {
-        background-size: cover;
-    }
-`;
 
 const AnimalPage = () => {
     const history = useHistory();
@@ -135,27 +102,20 @@ const AnimalPage = () => {
     const pages = useStoreState((state) => state.animal.pages);
     const getPages = useStoreActions((actions) => actions.animal.getPages);
 
-    const [width, setWidth] = useState<number | null>(null);
-
     const searchString = useStoreState((state) => state.animal.search);
     const setSearchString = useStoreActions((state) => state.animal.setSearch);
 
     const setPage = useStoreActions((actions) => actions.animal.setPage);
-    const setLimit = useStoreActions((actions) => actions.animal.setLimit);
 
     const getAnimals = useStoreActions((actions) => actions.animal.getAnimals);
     const animals = useStoreState((state) => state.animal.animals);
 
     const deleteAnimal = useStoreActions((actions) => actions.animal.deleteAnimal);
 
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
 
     const [text, setText] = useState('');
-    const [gameText, setGameText] = useState<any | null>([]);
 
-    const username = sessionStorage.getItem('username');
-
+    const [width, setWidth] = useState<number>(window.innerWidth);
     useEffect(() => {
         const listener = () => {
             return setWidth(window.innerWidth);
@@ -176,6 +136,7 @@ const AnimalPage = () => {
             search: '?page=' + page,
         });
         (async () => {
+            console.warn({searchString});
             await getPages({ limit: limit, search: searchString });
             await getAnimals({ page: page, limit: limit, search: searchString });
         })();
@@ -197,12 +158,13 @@ const AnimalPage = () => {
     function filterData() {
         console.log('searchString', searchString);
         (async () => {
+            setPage(1);
             await getPages({ limit: limit, search: searchString });
-            const data = await getAnimals({ page: page, limit: limit, search: searchString });
-
+            const data = await getAnimals({ page: 1, limit: limit, search: searchString });
+          
             console.log('animalsLength', data.length);
             if (data.length === 0) {
-                setText('Nebyli nalezeni žádné data.');
+                setText('No data found');
                 console.warn('setText', pages);
             } else {
                 setText('');
@@ -223,14 +185,13 @@ const AnimalPage = () => {
         await getAnimals({ page: page, limit: limit, search: searchString });
     }
 
-    console.log('window.height window.width', window.innerHeight - 520, window.innerWidth);
-
     return (
-        <div style={{ maxHeight: '100%' }}>
+        <>
             <Head title={'Animals'} />
+   
             <Navigation />
             <Content>
-                <Box className={'search-field-container'}>
+                <SearchFieldContainer>
                     <SearchField
                         searchText={searchString}
                         placeholder="Search..."
@@ -238,23 +199,33 @@ const AnimalPage = () => {
                         onEnter={() => filterData()}
                         onChange={(value, e) => updateSearchString(value, e)}
                         onSearchClick={() => filterData()}
+                        style={{marginBottom: text === '' ? '5rem' : '0rem'}}
                     />
-                </Box>
-                <div style={{ marginBottom: '5rem', fontSize: '2rem' }}>{text}</div>
-                <Grid container spacing={10} style={{ paddingLeft: 50, paddingRight: 50 }}>
+                </SearchFieldContainer>
+                {/*text === '' ? null : <NoData>{text}</NoData>*/}
+                <AnimalsGrid container spacing={10}>
                     {animals.length > 0 ? (
                         animals.map((animal) => {
                             return (
-                                <Grid item xs={12} sm={6} lg={4} xl={3} className="pb-3-5" key={animal.id}>
-                                    <Card className="card">
-                                        <CardMedia
-                                            component="img"
-                                            height="194"
-                                            image={animal?.images[0]?.urlName !== ''
-                                                ? `${window.location.protocol}//${window.location.hostname}:${window.location.port}/images/${animal?.images[0]?.urlName}`
-                                                : 'https://static.thenounproject.com/png/13643-200.png'}
-                                            alt="Paella dish"
-                                        />
+                                <Grid item xs={12} sm={6} lg={4} xl={3} key={animal.id}>
+                                    <CustomizedCard>
+                                        {
+                                            animal?.images[0]?.urlName !== '' 
+                                            ? 
+                                                <CardMedia
+                                                    component="img"
+                                                    height="194"
+                                                    image={animal?.images[0]?.urlName !== ''
+                                                        ? `${window.location.protocol}//${window.location.hostname}:${window.location.port}/images/${animal?.images[0]?.urlName}`
+                                                        : 'https://static.thenounproject.com/png/13643-200.png'}
+                                                    alt="Paella dish"
+                                                />
+                                            : 
+                                                <Flex justifyContent="center">
+                                                    <EmptyCardContent className="ra ra-lion ra-5x"></EmptyCardContent>
+                                                </Flex>
+                                        }
+                                   
                                         <CardContent>
                                             <Typography className="bold" variant="subtitle1" gutterBottom component="h2">
                                                 {animal.name}
@@ -263,12 +234,12 @@ const AnimalPage = () => {
                                                 <i>{animal.latinname}</i>
                                             </Typography>
                                         </CardContent>
-                                        <CardActions>
+                                        <CardActions sx={{marginTop: '3em'}}>
                                             <Grid
                                                 container
                                                 direction="row"
                                                 justifyContent="center"
-                                                alignItems="center"
+                                                alignContent="flex-end" alignItems="flex-end"
                                             >
                                                 
 
@@ -285,30 +256,35 @@ const AnimalPage = () => {
                                                 </DetailButton>
                                             </Grid>
                                         </CardActions>
-                                    </Card>
+                                    </CustomizedCard>
                                 </Grid>
                             );
                         })
-                    ) : text === '' ? (
-                        <ContenLoader animals={Array(8).fill(0)} />
-                    ) : null}
-                </Grid>
-                {pages !== null && (
+                    ) : (text === '' 
+                        ? 
+                        (<ContenLoader animals={Array(8).fill(0)} />) 
+                            : <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginBottom: '5em', textAlign: 'center'}}><NoData>{text}</NoData></Grid>)}
+                </AnimalsGrid>
+                {pages !== null ? (
                     <Pagination
                         page={page}
-                        className="pagination"
                         color="primary"
                         count={pages}
                         variant="outlined"
                         shape="rounded"
                         size={width !== null ? (width <= 430 ? 'medium' : 'large') : 'large'}
                         onChange={(e, page) => handleClick(page)}
-                        style={{ marginTop: '3rem' }}
+                        style={{ 
+                            marginTop: text === '' ? '3rem' : '8em',
+                            marginBottom: '2em',
+                            padding: width <= 430 ? '0 1em' : '0',
+                            
+                        }}
                     />
-                )}
+                ) : null}
             </Content>
-            <Footer positionAbsolute={text !== ''} />
-        </div>
+            <Footer/>
+        </>
     );
 };
 

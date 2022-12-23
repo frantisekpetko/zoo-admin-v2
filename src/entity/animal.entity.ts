@@ -28,7 +28,7 @@ export class Animal extends BaseEntity {
   description: string;
 
   @OneToMany((type) => Image, (image) => image.animal, {
-   onDelete: 'CASCADE', onUpdate: 'RESTRICT', orphanedRowAction: 'delete'
+    onDelete: 'CASCADE', onUpdate: 'RESTRICT', orphanedRowAction: 'delete'
   })
   images: Image[];
 
@@ -43,21 +43,4 @@ export class Animal extends BaseEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  /*
-  @Column('simple-json')
-  description: {
-    title: string;
-    content: string;
-    items?: [
-      {
-        title: string;
-        content: string;
-      },
-    ][];
-  }[];
-  */
-  /*
-    @ManyToOne(type => User, user => user.animals, { eager: false })
-    user: User;
-  */
 }

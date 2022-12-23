@@ -9,18 +9,46 @@ import NotFound404 from '../pages/NotFound404';
 import DataUploadPage from '../pages/DataUploadPage';
 import UpdatePage from '../pages/UpdatePage';
 import CreatePage from '../pages/CreatePage';
+import { useStoreState } from '../store';
+import React, {Suspense, lazy} from 'react';
+import Spinner from 'src/components/Spinner';
 
 const Routes = () => {
-    const isAuth = sessionStorage.getItem('accessToken');
+
+
+    const OpeningPage = lazy(() => import('src/pages/OpeningPage'));
+
+    const storageToken: string | null  = null;
+    const token: string | null = useStoreState((state) => state.user.accessToken);
+    let isAuth: string | null = sessionStorage.getItem('accessToken');
+    //console.log({ isAuth })
+    /*
+    React.useEffect(() => {
+        console.log(storageToken);
+        isAuth = storageToken;
+    }, []);
+
+    React.useEffect(() => {
+        storageToken !== null ? isAuth = storageToken : isAuth = token;
+    }, [storageToken, token]);
+    */
 
     return (
         <Switch>
-            <Route exact path="/" render={(props) => (isAuth !== null ? <HomePage /> : <OpeningPage />)} />
-
+            {/*<Route exact path="/" render={(props) => (isAuth !== null ? <HomePage /> : <OpeningPage />)} />*/}
+            <Route 
+             exact
+             path="/"
+             render={() => (
+                <Suspense fallback={null}>
+                    <OpeningPage/>
+                </Suspense>
+            )} />
+            
             <Route
                 exact
                 path="/login"
-                render={(props) =>
+                render={() =>
                     isAuth !== null ? (
                         <Redirect
                             to={{
@@ -36,13 +64,13 @@ const Routes = () => {
             <Route
                 exact
                 path="/upload"
-                render={(props) =>
+                render={() =>
                     isAuth !== null ? (
                         <DataUploadPage />
                     ) : (
                         <Redirect
                             to={{
-                                pathname: '/login',
+                                pathname: '/',
                                 //state: { from: props.location }
                             }}
                         />
@@ -53,13 +81,13 @@ const Routes = () => {
             <Route
                 exact
                 path="/animals"
-                render={(props) =>
+                render={() =>
                     isAuth !== null ? (
                         <AnimalPage />
                     ) : (
                         <Redirect
                             to={{
-                                pathname: '/login',
+                                pathname: '/',
                                 //state: { from: props.location }
                             }}
                         />
@@ -70,7 +98,7 @@ const Routes = () => {
             <Route
                 exact
                 path="/register"
-                render={(props) =>
+                render={() =>
                     isAuth === null ? (
                         <RegisterPage />
                     ) : (
@@ -93,7 +121,7 @@ const Routes = () => {
                      : (
                         <Redirect
                             to={{
-                                pathname: '/login',
+                                pathname: '/',
                             }}
                         />
                     )
@@ -109,7 +137,7 @@ const Routes = () => {
                     : (
                         <Redirect
                             to={{
-                                pathname: '/login',
+                                pathname: '/',
                             }}
                         />
                     )
@@ -125,7 +153,7 @@ const Routes = () => {
                     ) : (
                         <Redirect
                             to={{
-                                pathname: '/login',
+                                pathname: '/',
                             }}
                         />
                     )

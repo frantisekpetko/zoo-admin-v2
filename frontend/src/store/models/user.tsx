@@ -36,8 +36,11 @@ const user: UserModel = {
         state.username = payload;
     }),
     signIn: thunk(async (actions, payload: UserRequest) => {
-        const data = await Ajax.post('/auth/signin', payload);
-        return data;
+        const controller = new AbortController();
+
+        const data = await Ajax.post('/auth/signin', payload, { signal: controller.signal });
+
+        return {data: data, controller: controller};
     }),
     userLoading: false,
     setUserLoading: action((state, payload) => {
@@ -57,6 +60,7 @@ const user: UserModel = {
         sessionStorage.removeItem('accessToken');
     }),
     saveTokenToStorage: action((state, payload) => {
+       
         sessionStorage.setItem('accessToken', payload);
     }),
     logOut: action((state: any, actions) => {

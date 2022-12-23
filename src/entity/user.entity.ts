@@ -12,11 +12,13 @@ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Animal } from './animal.entity';
 
-@Entity({ name: 'user' })
+
 @Unique(['username'])
+@Entity({ name: 'user' })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
 
   @Column()
   username: string;
@@ -26,11 +28,6 @@ export class User extends BaseEntity {
 
   @Column()
   salt: string;
-
-  /*
-    @OneToMany(type => Animal, animal => animal.user, {eager: true})
-    animals: Animal[];
-    */
 
   @CreateDateColumn()
   createdAt: Date;

@@ -264,7 +264,7 @@ export class AppService {
     try {
       await user.save();
       _cli.success('success');
-    } catch (error) {
+    } catch (error: any) {
       if (error.errno === 19) {
         //duplicate username
         throw new ConflictException('Username already exists');
