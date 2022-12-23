@@ -176,19 +176,22 @@ export class AnimalRepository extends Repository<Animal> {
 
 
     animal.extlinks = [];
-    animal.images = [];
+
+    this.logger.log(updateAnimalDto.image !== '', updateAnimalDto.image);
     
-    const image = new Image();
-    image.urlName = updateAnimalDto.image;
-    this.logger.warn(updateAnimalDto.image);
-    try {
-      await image.save();
-    } catch (e) {
-      this.logger.log(e);
+    if (updateAnimalDto.image !== '') {
+      animal.images = [];
+      const image = new Image();
+      image.urlName = updateAnimalDto.image;
+      this.logger.warn(updateAnimalDto.image);
+      try {
+        await image.save();
+      } catch (e) {
+        this.logger.log(e);
+      }
+
+      animal.images.push(image);
     }
-
-
-    animal.images.push(image);
 
     for (const extlink of updateAnimalDto.extlinks) {
       const extLink: any = new Extlink();

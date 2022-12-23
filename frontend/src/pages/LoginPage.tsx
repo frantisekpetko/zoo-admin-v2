@@ -35,71 +35,19 @@ const FormField = styled(TextField)`
 `;
 
 
-const ErrorList = styled.ul`
-
-    padding-left: 0.5em;
-    margin: 0.5em;
-    
-`;
-
-type constraint = string[] | { response: { message: string } } | { response: { message: string[] } };
-
-const renderMessageArray = (errors: any) => {
-    console.log('errors', errors);
-    let constraints: any = null;
-    if (Array.isArray(errors)) {
-        constraints = errors.map((constraint, idx) => <li key={idx}>{constraint}</li>);
-        //commands.log('Array.isArray(errors)')
-    }
-    if (errors.hasOwnProperty('response') && errors.response.hasOwnProperty('message') && typeof errors.response.message == 'string') {
-        constraints = <li>{errors.message}</li>;
-        //commands.log('errors.hasOwnProperty(\'response\') && errors.response.hasOwnProperty(\'message\') && typeof errors.response.message == \'string\'')
-    }
-
-    if (errors.hasOwnProperty('response') && errors.response.hasOwnProperty('message') && Array.isArray(errors.response.message)) {
-        constraints = errors.response.message.map((constraint: string, idx: number) => <li key={idx}>{constraint}</li>);
-        //commands.log('errors.hasOwnProperty(\'response\') && errors.response.hasOwnProperty(\'message\') && Array.isArray(errors.response.message)')
-    }
-
-    return constraints;
-};
-
 const LoginPage: FC = (props: any) => {
     const signIn = useStoreActions((actions) => actions.user.signIn);
 
     const load = useStoreActions((actions) => actions.user.loadTokenToMemory);
     const save = useStoreActions((actions) => actions.user.saveTokenToStorage);
     const setUserUsername = useStoreActions((actions) => actions.user.setUsername);
-    //const loading = useStoreState((state) => state.trait.loading);
-
-    const token = useStoreState((state) => state.user.accessToken);
-
-    let controller = useRef<AbortController | null>(null);
 
     const navigate = useHistory();
-
-    useEffect(() => {
-        //document.body.style.backgroundColor = '#b8860b';
-        //document.body.style.backgroundColor = '#FAFAD2';
-        //setLoading(true);
-
-        return () => {
-            document.body.style.backgroundColor = '';
-            controller.current?.abort();
-        };
-    }, []);
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-
-
-
-
     const submit = async () => {
-
-
-        
         try {
             let data = await signIn({ username, password });
 
@@ -110,7 +58,7 @@ const LoginPage: FC = (props: any) => {
         }
         catch(error: any) {
                 toast.dismiss();
-                console.log('errorMessage', error);
+                //console.log('errorMessage', error);
                 const message = error.response.data.message;
                 toast.error((
                     <ToastErrorMessage message={message} />

@@ -8,15 +8,7 @@ import Footer from '../components/common/Footer';
 import Content from '../components/common/Content';
 import { Heading } from 'src/components/Heading';
 
-const Container = styled.div`
-    background-color: white;
-    color: black;
-    height: 100vh;
-`;
-
 function HomePage() {
-
-
     return (
       <>
           <Head title={'Zoo Admin'} />

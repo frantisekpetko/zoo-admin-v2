@@ -136,7 +136,7 @@ const AnimalPage = () => {
             search: '?page=' + page,
         });
         (async () => {
-            console.warn({searchString});
+            //console.warn({searchString});
             await getPages({ limit: limit, search: searchString });
             await getAnimals({ page: page, limit: limit, search: searchString });
         })();
@@ -156,13 +156,13 @@ const AnimalPage = () => {
     }
 
     function filterData() {
-        console.log('searchString', searchString);
+        //console.log('searchString', searchString);
         (async () => {
             setPage(1);
             await getPages({ limit: limit, search: searchString });
             const data = await getAnimals({ page: 1, limit: limit, search: searchString });
           
-            console.log('animalsLength', data.length);
+            //console.log('animalsLength', data.length);
             if (data.length === 0) {
                 setText('No data found');
                 console.warn('setText', pages);
@@ -171,7 +171,7 @@ const AnimalPage = () => {
             }
         })();
 
-        console.error('pages', pages);
+        //console.error('pages', pages);
     }
 
     function updateSearchString(value, e) {

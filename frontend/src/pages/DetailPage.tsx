@@ -73,7 +73,7 @@ export default function DetailPage() {
     useEffect(() => {
         (async () => {
             await getAnimal(id);
-            console.log('animal', animal)
+            //console.log('animal', animal)
         })();
     }, []);
 

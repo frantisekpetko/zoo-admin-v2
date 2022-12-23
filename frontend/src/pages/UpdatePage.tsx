@@ -101,8 +101,8 @@ function UpdatePage() {
         async function getData() {
             try {
                 await getAnimal(id);
-                console.log('id', id)
-                console.log('animal', animal);
+                //console.log('id', id)
+                //console.log('animal', animal);
 
                 const { data }: AnimalDetailUpdate = await Ajax.get(`animals/${id}`);
                 const extlinks: string[] = data?.extlinks?.map(item => {
@@ -116,14 +116,14 @@ function UpdatePage() {
                 });
 
                 data.extlinks = [...extlinks]
-                console.log('data', data);
+                //console.log('data', data);
                 setFormValues({ ...data, image: data?.images[0]?.urlName });
 
                 setExtlinks([...tempExtlinks]);
 
             }
             catch (e) {
-                console.error(e);
+                //console.error(e);
             }
 
         }
@@ -139,9 +139,9 @@ function UpdatePage() {
 
             const data = { ...formValues };
             data.extlinks[index] = value;
-            console.error('data', data, index);
+            //console.error('data', data, index);
             setFormValues({ ...data });
-            console.log('data after setState', formValues, index);
+            //console.log('data after setState', formValues, index);
 
         }
     };
@@ -176,8 +176,8 @@ function UpdatePage() {
         const values = validate(formValues, '');
         setFormErrors({ ...values });
 
-        console.log('saveAnimal', !(Object.keys(values).length > 0), formErrors)
-        console.log({selectedFile});
+        //console.log('saveAnimal', !(Object.keys(values).length > 0), formErrors)
+        //console.log({selectedFile});
         if (!(values.length > 0)) {
             try {
                 let data: any = '';
@@ -186,7 +186,7 @@ function UpdatePage() {
                     formData.append('image', selectedFile);
                     data = await Ajax.post('animals/file', formData);
                 }
-                console.log('updateAnimal', data, data?.data?.image)
+                //console.log('updateAnimal', data, data?.data?.image)
                 await updateAnimal({ id: animal.id, data: { ...formValues, image: data?.data?.image } });
                 toast.success('You have successfully updated this animal!', {
                     position: "top-center",
@@ -202,7 +202,7 @@ function UpdatePage() {
                 });
             } catch (error: any) {
                 const message = error.response.data.message;
-                console.log('errorMessage', message);
+                //console.log('errorMessage', message);
                 toast.error((
                     <ToastErrorMessage message={message} />
                 ), {
@@ -231,7 +231,7 @@ function UpdatePage() {
                 elm.setAttribute('type', 'url');
             }
             elm.value = u;
-            console.error(u, elm.validity.valid);
+            //console.error(u, elm.validity.valid);
             return elm.validity.valid;
         };
 
@@ -268,7 +268,7 @@ function UpdatePage() {
             }
         });
 
-        console.error('errors', errors);
+        //console.error('errors', errors);
         return errors;
     };
 
@@ -282,7 +282,7 @@ function UpdatePage() {
         tempData?.extlinks?.push('');
         setFormValues({ ...tempData });
 
-        console.log('tempData', tempData);
+        //console.log('tempData', tempData);
 
         setExtlinks((previousState) => [...previousState, '']);
     }
@@ -292,7 +292,7 @@ function UpdatePage() {
         const values = tempData?.extlinks?.filter((item, index) => {
             return id !== index;
         });
-        console.log('values', values)
+        //console.log('values', values)
         tempData.extlinks = [...values];
 
         extlinks.filter((item, index) => {
@@ -301,7 +301,7 @@ function UpdatePage() {
         });
         setFormValues({ ...tempData });
         setExtlinks([...extlinks]);
-        console.log('tempData', tempData)
+        //console.log('tempData', tempData)
 
     }
 

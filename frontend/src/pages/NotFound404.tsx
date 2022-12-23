@@ -1,4 +1,4 @@
-import React, { useEffect, FC } from 'react';
+import { FC } from 'react';
 import 'src/App.css';
 import Head from '../components/Head';
 import Navigation from '../components/common/Navigation';
@@ -12,7 +12,7 @@ const Description = styled.div`
     font-size: 0.5em;
 `
 
-function NotFound404(): ReturnType<FC> {
+const NotFound404: FC = () => {
     return (
         <>
             <Head title={'404'} />

@@ -81,6 +81,20 @@ export class AnimalsController {
       }),
     }),
   )
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: process.cwd() + '/frontend/dist/images',
+        filename: (req, file, callback) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const ext = extname(file.originalname);
+          const filename = `${uniqueSuffix}${ext}`;
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
   handleUpload(@UploadedFile() image: Express.Multer.File) {
     return {image: image.filename}
   }
