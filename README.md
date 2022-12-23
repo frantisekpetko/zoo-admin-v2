@@ -4,22 +4,33 @@
 
 ## Description
 
-Example of OpeningPage with [Nest](https://github.com/nestjs/nest) NodeJS TypeScript framework and [ReactJS](https://reactjs.org/) JavaScript library.
+Zoo Admin App with [Nest](https://github.com/nestjs/nest) NodeJS TypeScript framework and [ReactJS](https://reactjs.org/) JavaScript library.
 
-## Installation
+## Installation and setup
 
 ```bash
 $ npm install
-$ cd frontend && npm install
+$ npm run db:refresh
 ```
 
-## Running the app
+## Running the App
 
 ```bash
 # development
 $ npm run start:dev
-$ cd frontend && npm start
 
-And after visit http://localhost:3000/
+
+And after visit http://localhost:7000/
 ```
 
+## Running the frontend
+
+```bash
+# development
+$ cd frontend && npm install
+$ npm vite-dev
+
+# preview
+$ cd frontend && npm install
+$ npm vite-preview
+And after visit http://localhost:5000/

@@ -3,8 +3,8 @@
 /node_modules
 /dist
 /frontend/.idea
-#/frontend/dist
-/data/database.sqlite
+/frontend/dist
+
 /frontend/.vscode
 /frontend/.vs
 /frontend/index.js

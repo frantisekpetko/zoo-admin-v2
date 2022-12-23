@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
     "vite-dev": "vite",
     "vite-preview": "vite preview",
-    "vite-build": "tsc && vite build"
+    "vite-build": "vite build"
   },
   "keywords": [],
   "author": "František Petko",
