@@ -19,7 +19,6 @@ $ npm run db:refresh
 # development
 $ npm run start:dev
 
-
 And after visit http://localhost:7000/
 ```
 
