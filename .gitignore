@@ -2,6 +2,7 @@
 
 /node_modules
 /dist
+data/database.sqlite
 /frontend/.idea
 /frontend/dist
 
@@ -9,6 +10,8 @@
 /frontend/.vs
 /frontend/index.js
 /frontend/node_modules
+
+
 
 /.vs
 # Logs

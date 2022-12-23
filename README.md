@@ -10,7 +10,7 @@ Zoo Admin App with [Nest](https://github.com/nestjs/nest) NodeJS TypeScript fram
 
 ```bash
 $ npm install
-$ npm run db:refresh
+$ npm run db:setup
 ```
 
 ## Running the App (Frontend & Backend)

@@ -37,7 +37,7 @@
     "migration:revert": "npm run typeorm:cli -- migration:revert",
     "seed:config": "ts-node ./node_modules/typeorm-seeding/dist/cli.js config -n ./ormconfig.json",
     "seed:run": "ts-node ./node_modules/typeorm-seeding/dist/cli.js seed -n ./ormconfig.json",
-    "db:refresh": "npm run typeorm:cli schema:drop && npm run migration:run && npm run seed:run"
+    "db:setup": "npm run typeorm:cli schema:drop && npm run migration:run && npm run seed:run"
   },
   "dependencies": {
     "@nestjs/cli": "^7.5.1",
