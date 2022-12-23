@@ -8,10 +8,7 @@ data/database.sqlite
 
 /frontend/.vscode
 /frontend/.vs
-/frontend/index.js
 /frontend/node_modules
-
-
 
 /.vs
 # Logs
