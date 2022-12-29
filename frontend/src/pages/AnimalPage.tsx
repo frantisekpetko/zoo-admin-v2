@@ -276,10 +276,15 @@ const AnimalPage = () => {
                                 </Grid>
                             )
                         })}
-                        {(text !== '' && <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginBottom: '5em', textAlign: 'center' }}><NoData>{text}</NoData></Grid>)}
+                        
                     </AnimalsGrid>)
-                    : (<ContenLoader animals={Array(12).fill(0)}/>)
-                }
+                    : (text !== '' ? 
+                    (<AnimalsGrid container spacing={10}>
+                        <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginTop: '2em', textAlign: 'center' }}>
+                            <NoData>{text}</NoData>
+                        </Grid>
+                    </AnimalsGrid>) : (<ContenLoader animals={Array(12).fill(0)}/>)
+                )}
 
                 {pages !== null ? (
                     <Pagination
