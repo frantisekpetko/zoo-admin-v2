@@ -311,18 +311,18 @@ function UpdatePage() {
             <Navigation />
 
             {
-                (formValues && Object.keys(formValues).length > 0) 
+                (formValues && Object.keys(formValues).length > 0)
                     ? <>
                         <BackButton />
-           
+
                         <form>
                             <Content>
                                 <HeadingCenter>
                                     <Heading>Update Animal</Heading>
                                 </HeadingCenter>
                                 <UploadImage setSelectedFile={setSelectedFile} image={formValues.image} />
-                                
-                                                                
+
+
                                 <InputField
                                     error={formErrors?.name ? true : false}
                                     id="filled-error-helper-text"
@@ -377,7 +377,7 @@ function UpdatePage() {
                                         <ExtlinkTextField
                                             error={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index] ? true : false) : false}
                                             id="filled-error-helper-text"
-                                            label="External image url link"
+                                            label="External url link"
                                             value={extlink}
                                             helperText={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index]
                                                 ? formErrors?.extlinks[index]
@@ -400,30 +400,30 @@ function UpdatePage() {
                                     )
                                 }
                                 )}
-                               
+
                                 <Fab aria-label="remove" onClick={addNewExtlink} color="secondary">
                                     <AddIcon />
                                 </Fab>
 
                                 <SubmitButton
-                                    variant="contained" 
-                                    color="inherit" 
+                                    variant="contained"
+                                    color="inherit"
                                     onClick={(e) => handleSubmit(e)}
-                                    disabled={isSubmitting}    
+                                    disabled={isSubmitting}
                                 >
                                     Update Animal
                                 </SubmitButton>
-                   
+
                             </Content>
                         </form>
                         <Footer />
-                        </>
-                        : <>
-                            <Content>
-                                <Spinner />
-                            </Content>
-                        </>}                     
                     </>
+                    :
+                    <Content>
+                        <Spinner />
+                    </Content>
+            }
+        </>
     );
 }
 

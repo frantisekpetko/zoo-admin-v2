@@ -16,7 +16,7 @@ import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: root + '/project/../../frontend/dist',
+      rootPath: `${process.cwd()}/frontend/${process.env.NODE_ENV === 'development' ? 'public' : 'dist'}`,
       exclude: ['/api*'],
     }),
     TypeOrmModule.forRoot(typeOrmConfig),

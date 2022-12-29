@@ -16,21 +16,25 @@ $ npm run db:setup
 ## Running the App (Frontend & Backend)
 
 ```bash
-# development
-$ npm run start:dev
+# production
+$ npm run start
 
 And after visit http://localhost:7000/
 ```
 
-## Running the Frontend
+## Running the Development (Frontend & Backend)
 
 ```bash
-# development
+
+# backend development mode
+$ npm start:dev
+
+# frontend development mode
 $ cd frontend && npm install
 $ npm vite-dev
 And after visit http://localhost:4000/
-
-# preview
+OR
+# frontend preview mode
 $ cd frontend && npm install
 $ npm vite-preview
 And after visit http://localhost:5000/

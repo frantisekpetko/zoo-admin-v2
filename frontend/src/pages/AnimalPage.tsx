@@ -13,16 +13,16 @@ import { useStoreActions, useStoreState } from 'src/store';
 import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { 
-    Box, 
-    CardMedia, 
-    Pagination, 
-    Typography, 
-    CardActions, 
-    CardContent, 
-    Button, 
-    Grid, 
-    Card 
+import {
+    Box,
+    CardMedia,
+    Pagination,
+    Typography,
+    CardActions,
+    CardContent,
+    Button,
+    Grid,
+    Card
 } from '@mui/material';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -95,6 +95,9 @@ const EmptyCardContent = styled.div`
 
 
 const AnimalPage = () => {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+
     const history = useHistory();
 
     const page = useStoreState((state) => state.animal.page);
@@ -161,7 +164,7 @@ const AnimalPage = () => {
             setPage(1);
             await getPages({ limit: limit, search: searchString });
             const data = await getAnimals({ page: 1, limit: limit, search: searchString });
-          
+
             //console.log('animalsLength', data.length);
             if (data.length === 0) {
                 setText('No data found');
@@ -180,15 +183,28 @@ const AnimalPage = () => {
 
     async function itemDelete(id) {
         await deleteAnimal(id);
-        history.push('/animals');
+        let actualPage = page;
+        console.log('animalslength', animals.length == 0, animals.length);
+        if (animals.length == 1) {
+            actualPage = page - 1;
+            setPage(actualPage)
+            console.log('set page', page);
+        }
+
         await getPages({ limit: limit, search: searchString });
-        await getAnimals({ page: page, limit: limit, search: searchString });
+
+        await getAnimals({ page: actualPage, limit: limit, search: searchString });
+
+        history.push({
+            pathname: '/animals',
+            search: '?page=' + actualPage,
+        });
     }
 
     return (
         <>
             <Head title={'Animals'} />
-   
+
             <Navigation />
             <Content>
                 <SearchFieldContainer>
@@ -199,33 +215,33 @@ const AnimalPage = () => {
                         onEnter={() => filterData()}
                         onChange={(value, e) => updateSearchString(value, e)}
                         onSearchClick={() => filterData()}
-                        style={{marginBottom: text === '' ? '5rem' : '0rem'}}
+                        style={{ marginBottom: text === '' ? '5rem' : '0rem' }}
                     />
                 </SearchFieldContainer>
                 {/*text === '' ? null : <NoData>{text}</NoData>*/}
-                <AnimalsGrid container spacing={10}>
-                    {animals.length > 0 ? (
-                        animals.map((animal) => {
+
+                {animals.length > 0 ? (
+                    <AnimalsGrid container spacing={10}>
+
+                        {animals.map((animal) => {
                             return (
                                 <Grid item xs={12} sm={6} lg={4} xl={3} key={animal.id}>
                                     <CustomizedCard>
                                         {
-                                            animal?.images[0]?.urlName !== '' 
-                                            ? 
+                                            animal?.images[0]?.urlName !== ''
+                                                ?
                                                 <CardMedia
                                                     component="img"
                                                     height="194"
-                                                    image={animal?.images[0]?.urlName !== ''
-                                                        ? `${window.location.protocol}//${window.location.hostname}:${window.location.port}/images/${animal?.images[0]?.urlName}`
-                                                        : 'https://static.thenounproject.com/png/13643-200.png'}
-                                                    alt="Paella dish"
+                                                    image={`${window.location.protocol}//${window.location.hostname}:${window.location.port}/images/${animal?.images[0]?.urlName}`}
+                                                    alt={`${animal.latinname}`}
                                                 />
-                                            : 
+                                                :
                                                 <Flex justifyContent="center">
                                                     <EmptyCardContent className="ra ra-lion ra-5x"></EmptyCardContent>
                                                 </Flex>
                                         }
-                                   
+
                                         <CardContent>
                                             <Typography className="bold" variant="subtitle1" gutterBottom component="h2">
                                                 {animal.name}
@@ -234,23 +250,23 @@ const AnimalPage = () => {
                                                 <i>{animal.latinname}</i>
                                             </Typography>
                                         </CardContent>
-                                        <CardActions sx={{marginTop: '3em'}}>
+                                        <CardActions sx={{ marginTop: '3em' }}>
                                             <Grid
                                                 container
                                                 direction="row"
                                                 justifyContent="center"
                                                 alignContent="flex-end" alignItems="flex-end"
                                             >
-                                                
+
 
                                                 <UpdateButton size="small" onClick={() => history.push(`/animals/update/${animal.id}`)}>
-                                                    Update <EditIcon className="text-and-icon-space"  />
+                                                    Update <EditIcon className="text-and-icon-space" />
                                                 </UpdateButton>
 
                                                 <DeleteButton size="small" onClick={() => itemDelete(animal.id)}>
                                                     Delete <Icon className="text-and-icon-space" icon="trash" />
                                                 </DeleteButton>
-                                                
+
                                                 <DetailButton size="small" onClick={() => history.push(`/animals/detail/${animal.id}`)}>
                                                     Detail <Icon className="text-and-icon-space" icon="chevron-right" />
                                                 </DetailButton>
@@ -258,13 +274,13 @@ const AnimalPage = () => {
                                         </CardActions>
                                     </CustomizedCard>
                                 </Grid>
-                            );
-                        })
-                    ) : (text === '' 
-                        ? 
-                        (<ContenLoader animals={Array(8).fill(0)} />) 
-                            : <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginBottom: '5em', textAlign: 'center'}}><NoData>{text}</NoData></Grid>)}
-                </AnimalsGrid>
+                            )
+                        })}
+                        {(text === '' && <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginBottom: '5em', textAlign: 'center' }}><NoData>{text}</NoData></Grid>)}
+                    </AnimalsGrid>)
+                    : (<ContenLoader animals={Array(12).fill(0)}/>)
+                }
+
                 {pages !== null ? (
                     <Pagination
                         page={page}
@@ -274,16 +290,16 @@ const AnimalPage = () => {
                         shape="rounded"
                         size={width !== null ? (width <= 430 ? 'medium' : 'large') : 'large'}
                         onChange={(e, page) => handleClick(page)}
-                        style={{ 
+                        style={{
                             marginTop: text === '' ? '3rem' : '8em',
                             marginBottom: '2em',
                             padding: width <= 430 ? '0 1em' : '0',
-                            
+
                         }}
                     />
                 ) : null}
             </Content>
-            <Footer/>
+            <Footer />
         </>
     );
 };

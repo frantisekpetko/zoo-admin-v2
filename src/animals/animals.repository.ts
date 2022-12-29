@@ -41,15 +41,15 @@ export class AnimalRepository extends Repository<Animal> {
 
 
 
-        this.logger.log(animalsAfterSearch.length, 'animalsLength');
-        return animalsLength.length !== 0
-          ? Math.ceil(animalsAfterSearch.length / limit)
+        //this.logger.log(animalsAfterSearch.length, 'animalsLength');
+        return animalsAfterSearch.length !== 0
+          ? Math.ceil(animalsAfterSearch.length / limit) 
           : animalsAfterSearch.length;
       }
 
-      this.logger.log(animalsLength.length, 'animalsLength');
+      this.logger.log(animalsLength.length, `${animalsLength.length % limit}`);
       return animalsLength.length !== 0
-        ? Math.ceil(animalsLength.length / limit)
+        ? Math.ceil(animalsLength.length / limit) 
         : animalsLength.length;
     } catch (error: any) {
       this.logger.error(`Failed to get tasks for animals`, error.stack);
@@ -83,11 +83,11 @@ export class AnimalRepository extends Repository<Animal> {
             ['name', 'latinname'].some(key => animal[key].toLowerCase().includes(search.toLowerCase()))
         );
       }
-
+      this.logger.warn(animals.length, 'AnimalsLength')
 
       animals = [...animals.slice(
-        page === 1 ? 0 : ((page) * limit) - limit - 1,
-        page === 1 ? ((page) * limit) : ((page) * limit) - 1)
+        page === 1 ? 0 : ((page) * limit) - limit,
+        page === 1 ? ((page) * limit) : ((page) * limit))
       ];
 
       return animals;

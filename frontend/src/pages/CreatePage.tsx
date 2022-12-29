@@ -248,7 +248,7 @@ const CreatePage: FC = () => {
         <BackButton />
         <Content>
             <HeadingCenter>
-                <Heading className={'heading'}>Create Animal</Heading>
+                <Heading>Create Animal</Heading>
             </HeadingCenter>
             <UploadImage setSelectedFile={setSelectedFile} />
 
@@ -304,7 +304,7 @@ const CreatePage: FC = () => {
                     <ExtlinkTextField
                         error={true ? (extlinksErrors[index] ? true : false) : false}
                         id="filled-error-helper-text"
-                        label="External image url link"
+                        label="External url link"
                         value={extlink}
                         helperText={true ? (extlinksErrors[index]
                             ? extlinksErrors[index]

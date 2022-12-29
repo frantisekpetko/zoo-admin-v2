@@ -1,28 +1,22 @@
-import { Fragment } from 'react';
 import ContentLoader from 'react-content-loader';
 import styled from 'styled-components';
 
 import { Grid } from '@mui/material';
-import Content from './common/Content';
+
 
 const ContentLoaderGrid = styled(Grid)`
-  min-height: 25rem;
-  max-height: 25rem !important;
-  margin-right: 2rem;
-  display: flex;
-  flex-direction: row;
   padding: 10px;
-  border: none !important;
-  margin-top: -8rem !important;
 `
 
 const CardLoader = (props) => {
-    const width = 600;
-    const height = 750;
+    //const width = 600;
+    //const height = 750;
+    const width = 500;
+    const height = 500;
     console.log(props);
     return (
-        <Fragment>
-            <Content>
+        <>
+
                 {props.animals.length === 1 ? (
                     <ContentLoader
                         speed={3}
@@ -39,29 +33,29 @@ const CardLoader = (props) => {
                         <rect x="0" y="60" rx="2" ry="2" width={width} height={height} />
                     </ContentLoader>
                 ) : (
-                    <Grid container spacing={10} style={{ paddingLeft: 100, paddingRight: 50 }}>
+                    <Grid container spacing={5} style={{ paddingLeft: 50, paddingRight: 50 }}>
                         {props.animals.map((_, id) => (
-                            <ContentLoaderGrid item xs={12} sm={6} lg={4} xl={3} key={id}>
+                            <ContentLoaderGrid item xs={12} sm={6} lg={4} xl={3} key={id} sx={{ maxWidth: '100%', height: 'auto'}}>
                                 <ContentLoader
                                     speed={3}
-                                    width={width + 300}
-                                    height={height - 300}
-                                    viewBox={`0 0 ${height - 200} ${width - 150}`}
+                                    width={width}
+                                    height={height}
+                                    viewBox={`0 0 ${height} ${width}`}
                                     backgroundColor="#6a6868"
                                     foregroundColor="#ecebeb"
                                     {...props}
+                                    style={{
+                                        maxWidth: '100%', height: 'auto'}}
                                 >
                                     <circle cx="31" cy="31" r="15" />
                                     <rect x="58" y="18" rx="2" ry="2" width="140" height="10" />
                                     <rect x="58" y="34" rx="2" ry="2" width="140" height="10" />
-                                    <rect x="0" y="60" rx="2" ry="2" width={width} height={height } />
+                                    <rect x="0" y="60" rx="2" ry="2" width={width} height={height} />
                                 </ContentLoader>
                             </ContentLoaderGrid>
                         ))}
-                    </Grid>
-                )}
-            </Content>
-        </Fragment>
+                    </Grid>)}
+                </>
     );
 };
 
