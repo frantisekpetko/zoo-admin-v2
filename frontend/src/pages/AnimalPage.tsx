@@ -34,9 +34,9 @@ import EditIcon from '@mui/icons-material/Edit';
 
 library.add(fab, faChevronRight, faTrash);
 
-
 const CustomizedCard = styled(Card)`
     min-height: 24em;
+    margin-bottom: 0 !important;
 `
 
 const SearchField = styled(_SearchField)`
@@ -225,7 +225,7 @@ const AnimalPage = () => {
 
                         {animals.map((animal) => {
                             return (
-                                <Grid item xs={12} sm={6} lg={4} xl={3} key={animal.id}>
+                                <Grid item xs={12} sm={6} lg={4} xl={3} key={animal.id} sx={{marginBottom: 0}}>
                                     <CustomizedCard>
                                         {
                                             animal?.images[0]?.urlName !== ''
@@ -276,7 +276,7 @@ const AnimalPage = () => {
                                 </Grid>
                             )
                         })}
-                        {(text === '' && <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginBottom: '5em', textAlign: 'center' }}><NoData>{text}</NoData></Grid>)}
+                        {(text !== '' && <Grid item xs={12} sm={12} lg={12} xl={12} sx={{ marginBottom: '5em', textAlign: 'center' }}><NoData>{text}</NoData></Grid>)}
                     </AnimalsGrid>)
                     : (<ContenLoader animals={Array(12).fill(0)}/>)
                 }
@@ -292,7 +292,7 @@ const AnimalPage = () => {
                         onChange={(e, page) => handleClick(page)}
                         style={{
                             marginTop: text === '' ? '3rem' : '8em',
-                            marginBottom: '2em',
+                            marginBottom: '1rem',
                             padding: width <= 430 ? '0 1em' : '0',
 
                         }}

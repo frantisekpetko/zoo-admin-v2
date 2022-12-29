@@ -33,8 +33,4 @@ $ npm start:dev
 $ cd frontend && npm install
 $ npm vite-dev
 And after visit http://localhost:4000/
-OR
-# frontend preview mode
-$ cd frontend && npm install
-$ npm vite-preview
-And after visit http://localhost:5000/
+

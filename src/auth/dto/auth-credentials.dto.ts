@@ -18,7 +18,7 @@ export class AuthCredentialsDto {
     message: 'Password maximum length exceeded',
   })
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-    message: 'password too weak',
+    message: 'Password too weak, must include at least 8 characters, one digit, upper case letter and "non-word" character',
   })
   password: string;
 }

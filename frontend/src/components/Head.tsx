@@ -17,7 +17,6 @@ const Head = (props) => {
         <link rel="preconnect" href="https://cdnjs.cloudflare.com/ajax/libs" crossOrigin='anonymous'/>
 
         <meta id="meta-description" name="description" content="Zoo admin description." />
-
     </Helmet>;
 };
 

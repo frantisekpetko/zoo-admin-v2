@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField';
 import React, { FC, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, IconButton, InputAdornment } from '@mui/material';
 import Navigation from 'src/components/common/Navigation';
 import { useStoreActions } from '../store';
 import Head from '../components/Head';
@@ -10,6 +10,7 @@ import Content from '../components/common/Content';
 import Footer from '../components/common/Footer';
 import { toast } from 'react-toastify';
 import ToastErrorMessage from 'src/components/ToastErrorMessage';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 const Heading = styled.h1`
     margin-top: 0;
@@ -35,6 +36,9 @@ const RegisterPage: FC = (props: any) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const submit = async () => {
 
@@ -95,9 +99,23 @@ const RegisterPage: FC = (props: any) => {
                         label="Password"
                         margin="dense"
                         variant="filled"
-                        type="password"
+                        type={showPassword ? "text" : "password"} 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        InputProps={{ // <-- This is where the toggle button is added.
+                            endAdornment: (
+                                <InputAdornment position="end" sx={{ height: '1rem' }}>
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
+            
                     />
                     <Button color="inherit" fullWidth onClick={submit}>
                         Register

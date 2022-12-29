@@ -1,6 +1,6 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Button, Grid, Paper } from '@mui/material';
+import { Button, Grid, IconButton, Paper } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import React, { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
@@ -15,6 +15,7 @@ import ToastErrorMessage from 'src/components/ToastErrorMessage';
 import { useStoreActions, useStoreState } from 'src/store';
 import styled from 'styled-components';
 import Ajax from 'src/tools/Ajax';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 
 const Heading = styled.h1`
@@ -46,6 +47,10 @@ const LoginPage: FC = (props: any) => {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const [showPassword, setShowPassword] = useState(false);
+    const handleClickShowPassword = () => setShowPassword(!showPassword);
+    const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const submit = async () => {
         try {
@@ -126,13 +131,24 @@ const LoginPage: FC = (props: any) => {
                         label="Password"
                         margin="dense"
                         variant="filled"
-                        type="password"
+                        type={showPassword ? "text" : "password"} 
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <LockOutlinedIcon />
+                                </InputAdornment>
+                            ),
+                            endAdornment: (
+                                <InputAdornment position="end" sx={{height: '1rem'}}>
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={handleClickShowPassword}
+                                        onMouseDown={handleMouseDownPassword}
+                                    >
+                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                    </IconButton>
                                 </InputAdornment>
                             ),
                             'aria-label': 'theme'

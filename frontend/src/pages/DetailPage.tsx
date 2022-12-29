@@ -32,9 +32,6 @@ const Extlink = styled.a`
     width: 100%;
 `;
 
-
-
-
 const EmptyImageIcon = styled.i`
     color: #1d9d74;
     font-size: 10em;
@@ -97,7 +94,7 @@ export default function DetailPage() {
                     }
 
                     <ExlinkContainer>
-                        <h4>Odkazy:</h4>
+                        <h4>Links:</h4>
                         {animal?.extlinks?.map((e, id) => {
                             const link = `${e.link.slice(0, 35)}...`;
                             return (
