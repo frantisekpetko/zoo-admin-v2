@@ -10,12 +10,12 @@ interface Animal {
     updatedAt: string;
 }
 
-interface AnimalDetail {
+export interface AnimalDetail {
     id?: number;
     name?: string;
     latinname?: string;
     description?: string;
-    extlinks?: Extlinks[];
+    extlinks: Extlinks[];
     images: Image[];
     createdAt?: string;
     updatedAt?: string;
@@ -42,9 +42,7 @@ interface Extlinks {
     link: string;
 }
 
-interface AnimalRequest {
-    image: File;
-}
+
 
 export interface AnimalModel {
     page: number;

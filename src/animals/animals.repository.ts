@@ -102,10 +102,11 @@ export class AnimalRepository extends Repository<Animal> {
     query
       .where('animal.id = :animalId', { animalId: id })
       .innerJoinAndSelect(`animal.images`, 'image')
-      .innerJoinAndSelect('animal.extlinks', 'extlink');
+      .leftJoinAndSelect('animal.extlinks', 'extlink');
 
     try {
       const animal = await query.getOne();
+      this.logger.debug(animal, 'Animal')
       return animal;
     } catch (error: any) {
       this.logger.error(`Failed to get tasks for animals`, error.stack);

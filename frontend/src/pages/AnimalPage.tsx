@@ -95,8 +95,6 @@ const EmptyCardContent = styled.div`
 
 
 const AnimalPage = () => {
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 
     const history = useHistory();
 

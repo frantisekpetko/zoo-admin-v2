@@ -8,6 +8,7 @@ import Head from "../components/Head";
 import BackButton from '../components/BackButton';
 import Content from 'src/components/common/Content';
 import Flex from 'src/components/Flex';
+import { AnimalDetail } from 'src/store/models/animal';
 
 const Description = styled.p`
     padding: 0 1rem;
@@ -70,7 +71,7 @@ export default function DetailPage() {
     useEffect(() => {
         (async () => {
             await getAnimal(id);
-            //console.log('animal', animal)
+            console.log('animal', animal)
         })();
     }, []);
 
