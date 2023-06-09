@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 
+
 const Ajax: AxiosInstance = axios.create({
     baseURL: window.location.protocol !== 'https:' ? 'http://localhost:7000/api/' : '/api/',
     withCredentials: true,
@@ -21,10 +22,11 @@ Ajax.interceptors.response.use(
     },
     function (error) {
         function handleHttpError(e: any) {
+            console.warn(JSON.parse(JSON.stringify(e)));
             const { statusCode } = e.response.data;
 
             if (statusCode !== 401) {
-                throw e;
+                //throw e;
             } else {
                 window.location.href = '/login';
             }

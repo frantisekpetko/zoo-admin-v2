@@ -10,15 +10,12 @@ import { CreateDateColumn } from 'typeorm';
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import * as bcrypt from 'bcrypt';
-import { Animal } from './animal.entity';
-
 
 @Unique(['username'])
 @Entity({ name: 'user' })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
 
   @Column()
   username: string;

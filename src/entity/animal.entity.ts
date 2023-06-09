@@ -28,12 +28,12 @@ export class Animal extends BaseEntity {
   description: string;
 
   @OneToMany((type) => Image, (image) => image.animal, {
-    onDelete: 'CASCADE', onUpdate: 'RESTRICT', orphanedRowAction: 'delete'
+      onDelete: 'CASCADE', onUpdate: 'CASCADE' //orphanedRowAction: 'delete', cascade: true, 
   })
   images: Image[];
 
   @OneToMany((type) => Extlink, (extlink) => extlink.animal, {
-   onDelete: 'CASCADE', onUpdate: 'RESTRICT', orphanedRowAction: 'delete'
+      onDelete: 'CASCADE', onUpdate: 'CASCADE' //orphanedRowAction: 'delete', cascade: true, 
   })
   extlinks: Extlink[];
 

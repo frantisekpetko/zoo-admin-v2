@@ -72,6 +72,8 @@ const CreatePage: FC = () => {
     const [isCheckingForm, setIsCheckingForm] = useState(false);
     const [extlinksErrors, setExlinksErrors] = useState<string[]>(['']);
 
+    const [isFilePicked, setIsFilePicked] = useState(false);
+
     const animalRef: any = useRef({
         name: '',
         latinname: '',
@@ -198,6 +200,7 @@ const CreatePage: FC = () => {
                 if (selectedFile !== null) {
                     const formData = new FormData();
                     formData.append('image', selectedFile);
+      		    formData.append('fileName', selectedFile.name);
                     data = (await Ajax.post('animals/file', formData));
                 }
 
@@ -250,7 +253,12 @@ const CreatePage: FC = () => {
             <HeadingCenter>
                 <Heading>Create Animal</Heading>
             </HeadingCenter>
-            <UploadImage setSelectedFile={setSelectedFile} />
+            <UploadImage
+                setSelectedFile={setSelectedFile}
+                isFilePicked={isFilePicked}
+                setIsFilePicked={setIsFilePicked}
+
+            />
 
             <InputField
                 error={formik.touched?.name && formik.errors?.name ? true : false}

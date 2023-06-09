@@ -27,18 +27,21 @@ import { toast } from 'react-toastify';
 
 interface AnimalDetailUpdate {
     data: {
+        id: number;
         name?: string;
         latinname?: string;
         description?: string;
-        extlinks: {
-            id: number;
-            link: string
-        }[] | string[];
+        extlinks: Extlink[] | string[];
         images: Image[];
         createdAt?: string;
         updatedAt?: string;
     }
 
+}
+
+interface Extlink {
+    id: number | null;
+    link: string;
 }
 
 interface Image {
@@ -84,7 +87,7 @@ function UpdatePage() {
     const getAnimal = useStoreActions((actions) => actions.animal.getUpdateAnimal);
     const animal: any = useStoreState((state) => state.animal.animalUpdate);
 
-    const [extlinks, setExtlinks] = useState(['']);
+    const [extlinks, setExtlinks] = useState<Extlink[]>([{id: null, link: ''}]);
     const [formValues, setFormValues] = useState<any>(null);
     const [formErrors, setFormErrors] = useState<any>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,7 +97,7 @@ function UpdatePage() {
 
     const updateAnimal = useStoreActions((actions) => actions.animal.updateAnimal);
 
-
+    const [isFilePicked, setIsFilePicked] = useState(false);
 
 
     useEffect(() => {
@@ -109,17 +112,19 @@ function UpdatePage() {
                     return item.link;
                 });
 
-                let tempExtlinks: string[] = [];
+                let tempExtlinks: Extlink[] = [];
 
-                animal?.extlinks.map((item: string, index: number) => {
-                    tempExtlinks.push(item);
+                data.extlinks.map((item: Extlink, index: number) => {
+                    console.log({item})
+                    tempExtlinks.push({id: item.id, link: item.link});
                 });
 
-                data.extlinks = [...extlinks]
+                data.extlinks = [...tempExtlinks]
+                console.log({animal})
                 //console.log('data', data);
                 setFormValues({ ...data, image: data?.images[0]?.urlName });
 
-                setExtlinks([...tempExtlinks]);
+                setExtlinks([...data.extlinks]);
 
             }
             catch (e) {
@@ -138,7 +143,10 @@ function UpdatePage() {
         else {
 
             const data = { ...formValues };
-            data.extlinks[index] = value;
+            data.extlinks[index] = {
+                id: data.extlinks[index].id,
+                link: value
+            };
             //console.error('data', data, index);
             setFormValues({ ...data });
             //console.log('data after setState', formValues, index);
@@ -170,6 +178,8 @@ function UpdatePage() {
         setIsCheckingForm(false);
     };
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -181,13 +191,16 @@ function UpdatePage() {
         if (!(values.length > 0)) {
             try {
                 let data: any = '';
-                if (selectedFile !== null) {
+                
+                if (selectedFile !== null && isFilePicked) {
                     const formData = new FormData();
                     formData.append('image', selectedFile);
+                    formData.append('fileName', selectedFile.name);
                     data = await Ajax.post('animals/file', formData);
                 }
                 //console.log('updateAnimal', data, data?.data?.image)
                 await updateAnimal({ id: animal.id, data: { ...formValues, image: data?.data?.image } });
+                //console.log(formValues.extlinks)
                 toast.success('You have successfully updated this animal!', {
                     position: "top-center",
                     autoClose: 5000,
@@ -256,11 +269,11 @@ function UpdatePage() {
         errors.extlinks = [];
 
         values.extlinks.forEach((item, index) => {
-            if (!item) {
+            if (!item.link) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
                     errors.extlinks[index] = "Required";
                 }
-            } else if (!isValidUrl(item)) {
+            } else if (!isValidUrl(item.link)) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
                     errors.extlinks[index] = "Enter correct url";
                 }
@@ -279,12 +292,12 @@ function UpdatePage() {
 
     function addNewExtlink() {
         let tempData: any = { ...formValues };
-        tempData?.extlinks?.push('');
+        tempData?.extlinks?.push({id: null, link: ''});
         setFormValues({ ...tempData });
 
         //console.log('tempData', tempData);
 
-        setExtlinks((previousState) => [...previousState, '']);
+        setExtlinks((previousState) => [...previousState, { id: null, link: '' }]);
     }
 
     function removeExtlink(id) {
@@ -320,7 +333,12 @@ function UpdatePage() {
                                 <HeadingCenter>
                                     <Heading>Update Animal</Heading>
                                 </HeadingCenter>
-                                <UploadImage setSelectedFile={setSelectedFile} image={formValues.image} />
+                                <UploadImage 
+                                setSelectedFile={setSelectedFile} 
+                                image={formValues.image} 
+                                isFilePicked={isFilePicked}
+                                setIsFilePicked={setIsFilePicked}
+                                />
 
 
                                 <InputField
@@ -378,7 +396,7 @@ function UpdatePage() {
                                             error={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index] ? true : false) : false}
                                             id="filled-error-helper-text"
                                             label="External url link"
-                                            value={extlink}
+                                            value={extlink.link}
                                             helperText={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index]
                                                 ? formErrors?.extlinks[index]
                                                 : null) : null}

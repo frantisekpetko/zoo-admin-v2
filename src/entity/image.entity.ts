@@ -19,6 +19,14 @@ export class Image extends BaseEntity {
   @Column()
   urlName: string;
 
-  @ManyToOne((type) => Animal, (animal) => animal.images, { eager: false })
-  animal: Animal;
+    @ManyToOne((type) => Animal, (animal) => animal.images, {
+        eager: false,
+    })
+    @JoinColumn({
+        name: 'animal_id',
+    })
+    animal: Animal;
+
+    @Column({ nullable: true })
+    animal_id: number;
 }

@@ -10,6 +10,8 @@ data/database.sqlite
 /frontend/.vs
 /frontend/node_modules
 
+/_frontend
+
 /.vs
 # Logs
 logs

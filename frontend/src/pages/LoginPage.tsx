@@ -63,21 +63,51 @@ const LoginPage: FC = (props: any) => {
         }
         catch(error: any) {
                 toast.dismiss();
-                //console.log('errorMessage', error);
-                const message = error.response.data.message;
-                toast.error((
-                    <ToastErrorMessage message={message} />
-                ), {
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "colored",
-                    icon: false
 
-                });
+                const errorMessage = JSON.parse(JSON.stringify(error));
+                //console.log({errorMessage})
+                if (Object.keys(errorMessage).length === 0) {
+                    toast.error('You are probably offline. Check if your server is running.', {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                        icon: false
+
+                    });
+                }
+                else {
+                    //console.log('errorMessage', error);
+
+                    let errorMessage = { message: 'Unknown error' };
+
+                    if (error.response.data.hasOwnProperty('errors')) {
+                        errorMessage = error.response.data.errors;
+                    }
+
+                    if (error.response.data.hasOwnProperty('message')) {
+                        errorMessage = error.response.data.message.response.message;
+                    }
+
+                    //const message = error.response.data.message;
+                    toast.error((
+                        <ToastErrorMessage message={errorMessage} />
+                    ), {
+                        position: "top-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        theme: "colored",
+                        icon: false
+
+                    });
+                }
+
         }
         finally {
             if (sessionStorage.getItem('accessToken') !== null) {

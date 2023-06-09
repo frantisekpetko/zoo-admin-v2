@@ -8,7 +8,6 @@ import Routes from './routes/Routes';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer } from 'react-toastify';
 
-
 import 'react-toastify/dist/ReactToastify.css';
 /*
 ReactDOM.createRoot(document.getElementById('app') as HTMLElement).render(
