@@ -23,6 +23,7 @@ import Ajax from 'src/tools/Ajax';
 
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { isValidUrl } from 'src/tools/utils';
 
 
 interface AnimalDetailUpdate {
@@ -48,9 +49,6 @@ interface Image {
     id?: number;
     urlName?: string;
 }
-
-
-
 
 const InputField = styled(TextField)`
     margin-bottom: 1rem !important;
@@ -87,7 +85,7 @@ function UpdatePage() {
     const getAnimal = useStoreActions((actions) => actions.animal.getUpdateAnimal);
     const animal: any = useStoreState((state) => state.animal.animalUpdate);
 
-    const [extlinks, setExtlinks] = useState<Extlink[]>([{id: null, link: ''}]);
+    const [extlinks, setExtlinks] = useState<Extlink[]>([{ id: null, link: '' }]);
     const [formValues, setFormValues] = useState<any>(null);
     const [formErrors, setFormErrors] = useState<any>({});
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -115,12 +113,12 @@ function UpdatePage() {
                 let tempExtlinks: Extlink[] = [];
 
                 data.extlinks.map((item: Extlink, index: number) => {
-                    console.log({item})
-                    tempExtlinks.push({id: item.id, link: item.link});
+                    //console.log({item})
+                    tempExtlinks.push({ id: item.id, link: item.link });
                 });
 
                 data.extlinks = [...tempExtlinks]
-                console.log({animal})
+                //console.log({animal})
                 //console.log('data', data);
                 setFormValues({ ...data, image: data?.images[0]?.urlName });
 
@@ -191,7 +189,7 @@ function UpdatePage() {
         if (!(values.length > 0)) {
             try {
                 let data: any = '';
-                
+
                 if (selectedFile !== null && isFilePicked) {
                     const formData = new FormData();
                     formData.append('image', selectedFile);
@@ -237,16 +235,7 @@ function UpdatePage() {
     const validate = (values, formFieldName) => {
         let errors: any = {};
 
-        const isValidUrl = (u) => {
-            let elm;
-            if (!elm) {
-                elm = document.createElement('input');
-                elm.setAttribute('type', 'url');
-            }
-            elm.value = u;
-            //console.error(u, elm.validity.valid);
-            return elm.validity.valid;
-        };
+
 
         if (!isCheckingForm || formFieldName === 'name') {
             if (!values.name) {
@@ -285,14 +274,9 @@ function UpdatePage() {
         return errors;
     };
 
-
-
-
-
-
     function addNewExtlink() {
         let tempData: any = { ...formValues };
-        tempData?.extlinks?.push({id: null, link: ''});
+        tempData?.extlinks?.push({ id: null, link: '' });
         setFormValues({ ...tempData });
 
         //console.log('tempData', tempData);
@@ -333,17 +317,17 @@ function UpdatePage() {
                                 <HeadingCenter>
                                     <Heading>Update Animal</Heading>
                                 </HeadingCenter>
-                                <UploadImage 
-                                setSelectedFile={setSelectedFile} 
-                                image={formValues.image} 
-                                isFilePicked={isFilePicked}
-                                setIsFilePicked={setIsFilePicked}
+                                <UploadImage
+                                    setSelectedFile={setSelectedFile}
+                                    image={formValues.image}
+                                    isFilePicked={isFilePicked}
+                                    setIsFilePicked={setIsFilePicked}
                                 />
 
 
                                 <InputField
                                     error={formErrors?.name ? true : false}
-                                    id="filled-error-helper-text"
+                                    id="name"
                                     label="Name"
                                     helperText={formErrors?.name
                                         ? formErrors.name
@@ -358,7 +342,7 @@ function UpdatePage() {
 
                                 <InputField
                                     error={formErrors.latinname ? true : false}
-                                    id="filled-error-helper-text"
+                                    id="latinname"
                                     label="Latin name"
                                     value={formValues.latinname}
                                     helperText={formErrors.latinname
@@ -372,7 +356,7 @@ function UpdatePage() {
                                 />
 
                                 <InputField
-                                    id="filled-multiline-static"
+                                    id="description"
                                     label="Description"
                                     multiline
                                     rows={7}
@@ -389,12 +373,12 @@ function UpdatePage() {
                                 />
 
                                 {formValues.extlinks.map((extlink, index) => {
-                                    console.log(extlink);
+                                    //console.log(extlink);
 
                                     return (<ExtlinkWrapper key={index}>
                                         <ExtlinkTextField
                                             error={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index] ? true : false) : false}
-                                            id="filled-error-helper-text"
+                                            id="external-url-link"
                                             label="External url link"
                                             value={extlink.link}
                                             helperText={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index]

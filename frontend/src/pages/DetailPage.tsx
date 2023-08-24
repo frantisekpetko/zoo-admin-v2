@@ -106,6 +106,9 @@ export default function DetailPage() {
                                 </ExtlinkWrapper>
                             );
                         })}
+                        {animal?.extlinks.length === 0 &&
+                           <p>No extlinks available.</p>
+                        }
                     </ExlinkContainer>
                 </Container>
                 

@@ -32,17 +32,11 @@ import {
 } from '@mui/icons-material';
 import {
     TextField,
-    Button,
     Fab
 } from '@mui/material';
+import { isValidUrl } from 'src/tools/utils';
 
 
-
-
-interface Image {
-    id?: number;
-    urlname?: string;
-}
 
 const InputField = styled(TextField)`
     margin-bottom: 1rem !important;
@@ -116,18 +110,6 @@ const CreatePage: FC = () => {
     const validate = (formFieldName) => {
         let errors: string[] = [];
 
-        const isValidUrl = (u) => {
-            let elm;
-            if (!elm) {
-                elm = document.createElement('input');
-                elm.setAttribute('type', 'url');
-            }
-            elm.value = u;
-            //console.error(u, elm.validity.valid);
-            return elm.validity.valid;
-        };
-
-
         extlinks.forEach((item, index) => {
             if (!item) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
@@ -200,7 +182,7 @@ const CreatePage: FC = () => {
                 if (selectedFile !== null) {
                     const formData = new FormData();
                     formData.append('image', selectedFile);
-      		    formData.append('fileName', selectedFile.name);
+                    formData.append('fileName', selectedFile.name);
                     data = (await Ajax.post('animals/file', formData));
                 }
 
@@ -262,7 +244,7 @@ const CreatePage: FC = () => {
 
             <InputField
                 error={formik.touched?.name && formik.errors?.name ? true : false}
-                id="filled-error-helper-text"
+                id="name"
                 label="Name"
                 value={formik.values?.name}
                 helperText={formik.touched.name && formik.errors?.name
@@ -277,7 +259,7 @@ const CreatePage: FC = () => {
 
             <InputField
                 error={formik.touched.latinname && formik.errors.latinname ? true : false}
-                id="filled-error-helper-text"
+                id="latinname"
                 label="Latin name"
                 value={formik.values.latinname}
                 helperText={formik.touched.latinname && formik.errors.latinname
@@ -291,7 +273,7 @@ const CreatePage: FC = () => {
             />
 
             <InputField
-                id="filled-multiline-static"
+                id="description"
                 label="Description"
                 multiline
                 rows={5}
@@ -311,7 +293,7 @@ const CreatePage: FC = () => {
                 return (<ExtlinkWrapper key={index}>
                     <ExtlinkTextField
                         error={true ? (extlinksErrors[index] ? true : false) : false}
-                        id="filled-error-helper-text"
+                        id="external-url-link"
                         label="External url link"
                         value={extlink}
                         helperText={true ? (extlinksErrors[index]
