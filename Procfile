@@ -1,2 +1,2 @@
-web: npm run start:prod
-release: npm run heroku-build
+web: npm run start
+#release: npm run heroku-build
