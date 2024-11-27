@@ -7,7 +7,6 @@ import { getConnection } from 'typeorm';
 import { NestFactory } from '@nestjs/core';
 import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
-//import * as config from 'config';
 import { resolve } from 'path';
 import { Animal } from './entity/animal.entity';
 import { Image } from './entity/image.entity';
@@ -17,10 +16,7 @@ import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 import path from 'path';
 import * as compression from 'compression';
-// somewhere in your initialization file
 
-
-// "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/.bin/typeorm migration:run -c seed",
 async function bootstrap() {
   const logger = new Logger('<Bootstrap>');
   const app = await NestFactory.create(AppModule);
@@ -32,7 +28,6 @@ async function bootstrap() {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
-
 
   app.setGlobalPrefix('api');
 

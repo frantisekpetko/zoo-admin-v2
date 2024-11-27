@@ -7,10 +7,9 @@ import Content from 'src/components/common/Content';
 import { Heading } from 'src/components/Heading';
 import styled from 'styled-components';
 
-
 const Description = styled.div`
     font-size: 0.5em;
-`
+`;
 
 const NotFound404: FC = () => {
     return (
@@ -19,17 +18,18 @@ const NotFound404: FC = () => {
             <Navigation />
             <Content>
                 <Heading style={{ textAlign: 'center' }}>
-                    404 Error<br />
+                    404 Error
+                    <br />
                     <Description>
                         Page with url
-                        <code>'{window.location.pathname}'</code> 
+                        <code>'{window.location.pathname}'</code>
                         not found.
                     </Description>
                 </Heading>
             </Content>
-            <Footer/>
+            <Footer />
         </>
     );
-}
+};
 
 export default NotFound404;

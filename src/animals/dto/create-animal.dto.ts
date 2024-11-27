@@ -6,7 +6,6 @@ import {
   IsUrl,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export class CreateAnimalDto {
   @IsNotEmpty()
@@ -17,10 +16,9 @@ export class CreateAnimalDto {
 
   @IsNotEmpty()
   description: string;
-  
+
   @IsNotEmpty()
   image: string;
-  
 
   @IsUrl()
   @IsArray()

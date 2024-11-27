@@ -1,14 +1,12 @@
 import {
-  BeforeInsert,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
   Unique,
+  CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CreateDateColumn } from 'typeorm';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
 import * as bcrypt from 'bcrypt';
 
 @Unique(['username'])

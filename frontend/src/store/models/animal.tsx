@@ -42,8 +42,6 @@ interface Extlinks {
     link: string;
 }
 
-
-
 export interface AnimalModel {
     page: number;
     setPage: Action<AnimalModel, number>;
@@ -120,8 +118,8 @@ const animal: AnimalModel = {
     }),
     getUpdateAnimal: thunk(async (actions, payload) => {
         const { data }: any = await Ajax.get(`animals/${payload}`);
-        const extlinks:string[] = data?.extlinks?.map(item => {
-            return item.link
+        const extlinks: string[] = data?.extlinks?.map((item: Extlink) => {
+            return item.link;
         });
         delete data.extlinks;
         data.extlinks = [...extlinks];
@@ -138,15 +136,12 @@ const animal: AnimalModel = {
         state.animal = payload;
     }),
     addAnimal: action((state, payload) => {
-        console.log('payload', payload, 'xxxxxxxxxxxxxxxxxxxxxx');
         state.animals = [...state.animals, payload];
     }),
     saveAnimal: thunk(async (actions, payload) => {
         try {
             actions.setLoading(true);
-            const { data } = await Ajax.post('/animals', payload);
-            console.log('data', data);
-            //actions.addAnimal(data);
+            await Ajax.post('/animals', payload);
             actions.setLoading(false);
         } catch (e) {
             console.log('error', e);
@@ -163,23 +158,19 @@ const animal: AnimalModel = {
     }),
     deleteAnimal: thunk(async (actions, payload) => {
         try {
-            console.log('payload', payload);
             actions.setLoading(true);
             await Ajax.delete(`/animals/${payload}`);
             actions.setLoading(false);
         } catch (e) {
-            console.log('error', e);
             actions.setError(e);
         }
     }),
     updateAnimal: thunk(async (actions, payload) => {
         try {
-            console.log('payload', payload);
             actions.setLoading(true);
             await Ajax.patch(`/animals/${payload.id}`, payload.data);
             actions.setLoading(false);
         } catch (e) {
-            console.log('error', e);
             actions.setError(e);
         }
     }),

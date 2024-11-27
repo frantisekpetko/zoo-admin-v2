@@ -1,7 +1,5 @@
 import { Redirect, Route, Switch } from 'react-router-dom';
-import OpeningPage from 'src/pages/OpeningPage';
 import LoginPage from 'src/pages/LoginPage';
-import HomePage from '../pages/HomePage';
 import RegisterPage from '../pages/RegisterPage';
 import DetailPage from '../pages/DetailPage';
 import AnimalPage from '../pages/AnimalPage';
@@ -10,41 +8,25 @@ import DataUploadPage from '../pages/DataUploadPage';
 import UpdatePage from '../pages/UpdatePage';
 import CreatePage from '../pages/CreatePage';
 import { useStoreState } from '../store';
-import React, {Suspense, lazy} from 'react';
-import Spinner from 'src/components/Spinner';
+import { Suspense, lazy } from 'react';
 
 const Routes = () => {
-
-
     const OpeningPage = lazy(() => import('src/pages/OpeningPage'));
 
-    const storageToken: string | null  = null;
-    const token: string | null = useStoreState((state) => state.user.accessToken);
-    let isAuth: string | null = sessionStorage.getItem('accessToken');
-    //console.log({ isAuth })
-    /*
-    React.useEffect(() => {
-        console.log(storageToken);
-        isAuth = storageToken;
-    }, []);
-
-    React.useEffect(() => {
-        storageToken !== null ? isAuth = storageToken : isAuth = token;
-    }, [storageToken, token]);
-    */
+    const isAuth: string | null = sessionStorage.getItem('accessToken');
 
     return (
         <Switch>
-            {/*<Route exact path="/" render={(props) => (isAuth !== null ? <HomePage /> : <OpeningPage />)} />*/}
-            <Route 
-             exact
-             path="/"
-             render={() => (
-                <Suspense fallback={null}>
-                    <OpeningPage/>
-                </Suspense>
-            )} />
-            
+            <Route
+                exact
+                path="/"
+                render={() => (
+                    <Suspense fallback={null}>
+                        <OpeningPage />
+                    </Suspense>
+                )}
+            />
+
             <Route
                 exact
                 path="/login"
@@ -71,7 +53,6 @@ const Routes = () => {
                         <Redirect
                             to={{
                                 pathname: '/',
-                                //state: { from: props.location }
                             }}
                         />
                     )
@@ -88,7 +69,6 @@ const Routes = () => {
                         <Redirect
                             to={{
                                 pathname: '/',
-                                //state: { from: props.location }
                             }}
                         />
                     )
@@ -105,7 +85,6 @@ const Routes = () => {
                         <Redirect
                             to={{
                                 pathname: '/',
-                                //state: { from: props.location }
                             }}
                         />
                     )
@@ -116,9 +95,9 @@ const Routes = () => {
                 exact
                 path={'/animals/create'}
                 render={() =>
-                    isAuth !== null ? 
+                    isAuth !== null ? (
                         <CreatePage />
-                     : (
+                    ) : (
                         <Redirect
                             to={{
                                 pathname: '/',
@@ -132,9 +111,9 @@ const Routes = () => {
                 exact
                 path={'/animals/update/:id'}
                 render={() =>
-                    isAuth !== null ? 
+                    isAuth !== null ? (
                         <UpdatePage />
-                    : (
+                    ) : (
                         <Redirect
                             to={{
                                 pathname: '/',

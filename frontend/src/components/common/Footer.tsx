@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC } from 'react';
 import styled from 'styled-components';
 
 const FooterElement = styled.footer`
@@ -12,10 +12,10 @@ const FooterElement = styled.footer`
     font-weight: bolder;
     transition: background-color 2s;
     -webkit-transition: background-color 2s;
-    flex-shrink: 0;  
-    text-align: center;  
+    flex-shrink: 0;
+    text-align: center;
     padding: 1em 0 1em 0;
-  
+
     &:hover {
         background-color: #99cc33;
         color: black;
@@ -38,13 +38,10 @@ const FooterCustomText = styled.div`
     padding: 0 0.5em;
 `;
 
-const Footer: FC<{}> = () => {
+const Footer: FC<any> = () => {
     return (
         <FooterElement>
-            <FooterCustomText>
-                Copyright&copy; {new Date().getFullYear()} Zoo Admin
-
-            </FooterCustomText>
+            <FooterCustomText>Copyright&copy; {new Date().getFullYear()} Zoo Admin</FooterCustomText>
             <HandWrited>Created by František Petko</HandWrited>
             <FooterCustomText>Powered by NodeJS, NestJS, ReactJS, MUI and my skills.</FooterCustomText>
         </FooterElement>

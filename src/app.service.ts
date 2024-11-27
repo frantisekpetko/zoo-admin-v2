@@ -94,8 +94,7 @@ export class AppService {
           const url = await image_finder.find(namesObj[index], {
             size: 'medium',
           });
-          //, {size: "large", color: "pink"}
-          //download(url);
+
           const imageName = `${latinnamesObj[index]}${uuidv4()}.jpg`;
           await downloadImage(
             `${url}`,
@@ -111,7 +110,6 @@ export class AppService {
         }
       }),
     );
-    //commands.log(JSON.stringify(imagesObj, null, 4));
 
     fs.writeFileSync(
       './src/data/seed/animals/images.json',
@@ -134,9 +132,7 @@ export class AppService {
 
   async prepareData(data, index) {
     const wiki = require('wikijs').default;
-    /*const namesObj = JSON.parse(
-      fs.readFileSync(resolve('./src/data/seed/animals/names.json'), 'utf8'),
-    );*/
+
     const latinnamesObj = JSON.parse(
       fs.readFileSync(
         resolve('./src/data/seed/animals/latinnames.json'),
@@ -155,7 +151,6 @@ export class AppService {
       wiki({ apiUrl: 'https://cz.wikipedia.org/w/api.php' })
         .page(data.latinname)
         .then(async (page) => {
-          //content = await page.content();
           content = await page.chain().summary().extlinks().request();
           descriptionObj.push({
             name: data.name,
@@ -204,12 +199,11 @@ export class AppService {
     const entities = getConnection().entityMetadatas;
 
     for (const entity of entities) {
-      const repository = getConnection().getRepository(entity.name); // Get repository
-      await repository.clear(); // Clear each entity table's content
+      const repository = getConnection().getRepository(entity.name);
+      await repository.clear();
     }
 
     for (const _animal of animalsObj) {
-      //const index = animalsObj.indexOf(_animal);
       const animal = new Animal();
       animal.name = _animal.name;
       animal.latinname = _animal.latinname;
@@ -219,7 +213,6 @@ export class AppService {
       await conn.manager.save(image);
 
       animal.images = [image];
-      //console.log(animal.images);
       animal.extlinks = [];
 
       for (const extlink of _animal.extlinks) {
@@ -228,7 +221,7 @@ export class AppService {
         await conn.manager.save(extLink);
         animal.extlinks.push(extLink);
       }
-      //console.log(animal.extlinks);
+
       await conn.manager.save(animal);
     }
   }
@@ -238,21 +231,7 @@ export class AppService {
     args: {},
   })
   async createSeeds(): Promise<void> {
-    /*let item = await getRepository(Trait)
-                .createQueryBuilder('trait')
-                .skip(0)
-                .take(1)
-                .orderBy('trait.id', 'DESC');
-    */
-    /*
-    const createTraitsDto: CreateTraitsDto = new CreateTraitsDto();
-    createTraitsDto.name = 'lord';
-
-    const query = getConnection().createQueryBuilder();
-    await query.insert().into(Trait).values([createTraitsDto]).execute();
-    */
     const salt = await bcrypt.genSalt();
-    //commands.log(salt);
 
     const user = new User();
 
@@ -260,13 +239,12 @@ export class AppService {
     user.salt = salt;
     user.password = await bcrypt.hash('123456', salt);
 
-    //commands.log(user.password);
     try {
       await user.save();
       _cli.success('success');
     } catch (error: any) {
       if (error.errno === 19) {
-        //duplicate username
+        // check for duplicate username
         throw new ConflictException('Username already exists');
       } else {
         throw new InternalServerErrorException();

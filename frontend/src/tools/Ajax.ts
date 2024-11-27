@@ -26,7 +26,7 @@ Ajax.interceptors.response.use(
             const { statusCode } = e.response.data;
 
             if (statusCode !== 401) {
-                //throw e;
+                throw e;
             } else {
                 window.location.href = '/login';
             }

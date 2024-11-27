@@ -3,7 +3,7 @@ import Head from '../components/Head';
 import Navigation from '../components/common/Navigation';
 import Footer from '../components/common/Footer';
 import Content from '../components/common/Content';
-import { useRef} from 'react';
+import { useRef } from 'react';
 
 export const Heading = styled.h2`
     text-align: center;
@@ -17,8 +17,7 @@ export const Heading = styled.h2`
 `;
 
 function OpeningPage() {
-
-    let isAuth = useRef<string | null>(sessionStorage.getItem('accessToken'));
+    const isAuth = useRef<string | null>(sessionStorage.getItem('accessToken'));
 
     return (
         <>
@@ -26,9 +25,7 @@ function OpeningPage() {
             <Navigation />
             <>
                 <Content>
-                    <Heading className={'heading'}>
-                        {!isAuth.current ? 'Basic zoo admin app' : 'Hey, You are logged in !'}
-                    </Heading>
+                    <Heading className={'heading'}>{!isAuth.current ? 'Basic zoo admin app' : 'Hey, You are logged in !'}</Heading>
                 </Content>
             </>
             <Footer />

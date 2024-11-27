@@ -15,7 +15,7 @@ export class AnimalsService {
   ) {}
 
   create(createAnimalDto: CreateAnimalDto) {
-      return this.animalRepository.createOne(createAnimalDto);
+    return this.animalRepository.createOne(createAnimalDto);
   }
 
   async getPagesNumber(limit: number, search: string): Promise<number> {

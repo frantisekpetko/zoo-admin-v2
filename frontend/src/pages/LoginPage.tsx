@@ -1,22 +1,19 @@
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Button, Grid, IconButton, Paper } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import React, { FC, MutableRefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Content from 'src/components/common/Content';
 import Footer from 'src/components/common/Footer';
 import Navigation from 'src/components/common/Navigation';
-import ErrorMessage from 'src/components/ToastErrorMessage';
 import Head from 'src/components/Head';
 import ToastErrorMessage from 'src/components/ToastErrorMessage';
-import { useStoreActions, useStoreState } from 'src/store';
+import { useStoreActions } from 'src/store';
 import styled from 'styled-components';
-import Ajax from 'src/tools/Ajax';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
+import { useCallback, useState } from 'react';
 
 const Heading = styled.h1`
     margin-top: 0;
@@ -28,15 +25,13 @@ export const FormContainer = styled.div`
     max-width: 450px;
     padding: 1em;
     border-radius: 5px;
-
 `;
 
 const FormField = styled(TextField)`
     width: 100%;
 `;
 
-
-const LoginPage: FC = (props: any) => {
+const LoginPage = (props: any) => {
     const signIn = useStoreActions((actions) => actions.user.signIn);
 
     const load = useStoreActions((actions) => actions.user.loadTokenToMemory);
@@ -54,62 +49,49 @@ const LoginPage: FC = (props: any) => {
 
     const submit = async () => {
         try {
-            let data = await signIn({ username, password });
+            const data = await signIn({ username, password });
 
             save(data.data?.data?.accessToken);
             setUserUsername(data.data?.data?.username);
             load();
+        } catch (error: any) {
+            toast.dismiss();
 
-        }
-        catch(error: any) {
-                toast.dismiss();
+            const errorMessage = JSON.parse(JSON.stringify(error));
+            if (Object.keys(errorMessage).length === 0) {
+                toast.error('You are probably offline. Check if your server is running.', {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    icon: false,
+                });
+            } else {
+                let errorMessage = { message: 'Unknown error' };
 
-                const errorMessage = JSON.parse(JSON.stringify(error));
-                //console.log({errorMessage})
-                if (Object.keys(errorMessage).length === 0) {
-                    toast.error('You are probably offline. Check if your server is running.', {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        theme: "colored",
-                        icon: false
-
-                    });
-                }
-                else {
-                    //console.log('errorMessage', error);
-
-                    let errorMessage = { message: 'Unknown error' };
-
-                    if (error.response.data.hasOwnProperty('errors')) {
-                        errorMessage = error.response.data.errors;
-                    }
-
-                    if (error.response.data.hasOwnProperty('message')) {
-                        errorMessage = error.response.data.message.response.message;
-                    }
-
-                    //const message = error.response.data.message;
-                    toast.error((
-                        <ToastErrorMessage message={errorMessage} />
-                    ), {
-                        position: "top-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        theme: "colored",
-                        icon: false
-
-                    });
+                if (error.response.data.hasOwnProperty('errors')) {
+                    errorMessage = error.response.data.errors;
                 }
 
-        }
-        finally {
+                if (error.response.data.hasOwnProperty('message')) {
+                    errorMessage = error.response.data.message.response.message;
+                }
+
+                toast.error(<ToastErrorMessage message={errorMessage} />, {
+                    position: 'top-center',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    theme: 'colored',
+                    icon: false,
+                });
+            }
+        } finally {
             if (sessionStorage.getItem('accessToken') !== null) {
                 navigate.replace('/');
             }
@@ -122,16 +104,16 @@ const LoginPage: FC = (props: any) => {
 
     const ENTER_KEY = 13;
 
+    const onEnterHandler = useCallback(
+        (event) => {
+            const isEnterPressed = event.which === ENTER_KEY || event.keyCode === ENTER_KEY;
 
-    const onEnterHandler = useCallback((event) => {
-        const isEnterPressed = event.which === ENTER_KEY
-            || event.keyCode === ENTER_KEY;
-
-        if (isEnterPressed) {
-            submit();
-        }
-
-    }, [submit]);
+            if (isEnterPressed) {
+                submit();
+            }
+        },
+        [submit]
+    );
 
     return (
         <>
@@ -153,7 +135,7 @@ const LoginPage: FC = (props: any) => {
                                     <AccountCircleOutlinedIcon />
                                 </InputAdornment>
                             ),
-                            'aria-label': 'theme'
+                            'aria-label': 'theme',
                         }}
                         onKeyUp={onEnterHandler}
                     />
@@ -161,7 +143,7 @@ const LoginPage: FC = (props: any) => {
                         label="Password"
                         margin="dense"
                         variant="filled"
-                        type={showPassword ? "text" : "password"} 
+                        type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         InputProps={{
@@ -171,7 +153,7 @@ const LoginPage: FC = (props: any) => {
                                 </InputAdornment>
                             ),
                             endAdornment: (
-                                <InputAdornment position="end" sx={{height: '1rem'}}>
+                                <InputAdornment position="end" sx={{ height: '1rem' }}>
                                     <IconButton
                                         aria-label="toggle password visibility"
                                         onClick={handleClickShowPassword}
@@ -181,7 +163,7 @@ const LoginPage: FC = (props: any) => {
                                     </IconButton>
                                 </InputAdornment>
                             ),
-                            'aria-label': 'theme'
+                            'aria-label': 'theme',
                         }}
                         onKeyUp={onEnterHandler}
                     />

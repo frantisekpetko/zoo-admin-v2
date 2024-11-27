@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { TextField, Fab } from '@mui/material';
@@ -25,7 +25,6 @@ import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { isValidUrl } from 'src/tools/utils';
 
-
 interface AnimalDetailUpdate {
     data: {
         id: number;
@@ -36,8 +35,7 @@ interface AnimalDetailUpdate {
         images: Image[];
         createdAt?: string;
         updatedAt?: string;
-    }
-
+    };
 }
 
 interface Extlink {
@@ -68,7 +66,6 @@ const HeadingCenter = styled.div`
     text-align: center;
 `;
 
-
 const ExtlinkWrapper = styled.div`
     display: flex;
     direction: row;
@@ -78,9 +75,7 @@ const ExtlinkWrapper = styled.div`
     height: 100%;
 `;
 
-
 function UpdatePage() {
-
     const { id }: Id = useParams();
     const getAnimal = useStoreActions((actions) => actions.animal.getUpdateAnimal);
     const animal: any = useStoreState((state) => state.animal.animalUpdate);
@@ -97,38 +92,26 @@ function UpdatePage() {
 
     const [isFilePicked, setIsFilePicked] = useState(false);
 
-
     useEffect(() => {
         async function getData() {
             try {
                 await getAnimal(id);
-                //console.log('id', id)
-                //console.log('animal', animal);
 
                 const { data }: AnimalDetailUpdate = await Ajax.get(`animals/${id}`);
-                const extlinks: string[] = data?.extlinks?.map(item => {
-                    return item.link;
-                });
 
-                let tempExtlinks: Extlink[] = [];
+                const tempExtlinks: Extlink[] = [];
 
-                data.extlinks.map((item: Extlink, index: number) => {
+                data.extlinks.forEach((item: Extlink) => {
                     //console.log({item})
                     tempExtlinks.push({ id: item.id, link: item.link });
                 });
 
-                data.extlinks = [...tempExtlinks]
-                //console.log({animal})
-                //console.log('data', data);
+                data.extlinks = [...tempExtlinks];
+
                 setFormValues({ ...data, image: data?.images[0]?.urlName });
 
                 setExtlinks([...data.extlinks]);
-
-            }
-            catch (e) {
-                //console.error(e);
-            }
-
+            } catch (e) {}
         }
         getData();
     }, []);
@@ -137,18 +120,13 @@ function UpdatePage() {
         const { name, value } = e.target;
         if (name !== 'extlinks') {
             setFormValues({ ...formValues, [name]: value });
-        }
-        else {
-
+        } else {
             const data = { ...formValues };
             data.extlinks[index] = {
                 id: data.extlinks[index].id,
-                link: value
+                link: value,
             };
-            //console.error('data', data, index);
             setFormValues({ ...data });
-            //console.log('data after setState', formValues, index);
-
         }
     };
 
@@ -176,16 +154,12 @@ function UpdatePage() {
         setIsCheckingForm(false);
     };
 
-
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         const values = validate(formValues, '');
         setFormErrors({ ...values });
 
-        //console.log('saveAnimal', !(Object.keys(values).length > 0), formErrors)
-        //console.log({selectedFile});
         if (!(values.length > 0)) {
             try {
                 let data: any = '';
@@ -196,36 +170,32 @@ function UpdatePage() {
                     formData.append('fileName', selectedFile.name);
                     data = await Ajax.post('animals/file', formData);
                 }
-                //console.log('updateAnimal', data, data?.data?.image)
                 await updateAnimal({ id: animal.id, data: { ...formValues, image: data?.data?.image } });
-                //console.log(formValues.extlinks)
+
                 toast.success('You have successfully updated this animal!', {
-                    position: "top-center",
+                    position: 'top-center',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
-                    theme: "colored",
+                    theme: 'colored',
                     icon: false,
-                    style: width < 480 ? { width: '97%' } : undefined
-
+                    style: width < 480 ? { width: '97%' } : undefined,
                 });
             } catch (error: any) {
                 const message = error.response.data.message;
-                //console.log('errorMessage', message);
-                toast.error((
-                    <ToastErrorMessage message={message} />
-                ), {
-                    position: "top-center",
+
+                toast.error(<ToastErrorMessage message={message} />, {
+                    position: 'top-center',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
-                    theme: "colored",
+                    theme: 'colored',
                     icon: false,
-                    style: width < 480 ? { width: '97%' } : undefined
+                    style: width < 480 ? { width: '97%' } : undefined,
                 });
             }
         }
@@ -235,23 +205,21 @@ function UpdatePage() {
     const validate = (values, formFieldName) => {
         let errors: any = {};
 
-
-
         if (!isCheckingForm || formFieldName === 'name') {
             if (!values.name) {
-                errors.name = "Required";
+                errors.name = 'Required';
             }
         }
 
         if (!isCheckingForm || formFieldName === 'latinname') {
             if (!values.latinname) {
-                errors.latinname = "Required";
+                errors.latinname = 'Required';
             }
         }
 
         if (!isCheckingForm || formFieldName === 'description') {
             if (!values.description) {
-                errors.description = "Required";
+                errors.description = 'Required';
             }
         }
 
@@ -260,17 +228,15 @@ function UpdatePage() {
         values.extlinks.forEach((item, index) => {
             if (!item.link) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
-                    errors.extlinks[index] = "Required";
+                    errors.extlinks[index] = 'Required';
                 }
             } else if (!isValidUrl(item.link)) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
-                    errors.extlinks[index] = "Enter correct url";
+                    errors.extlinks[index] = 'Enter correct url';
                 }
-
             }
         });
 
-        //console.error('errors', errors);
         return errors;
     };
 
@@ -278,9 +244,6 @@ function UpdatePage() {
         let tempData: any = { ...formValues };
         tempData?.extlinks?.push({ id: null, link: '' });
         setFormValues({ ...tempData });
-
-        //console.log('tempData', tempData);
-
         setExtlinks((previousState) => [...previousState, { id: null, link: '' }]);
     }
 
@@ -289,7 +252,7 @@ function UpdatePage() {
         const values = tempData?.extlinks?.filter((item, index) => {
             return id !== index;
         });
-        //console.log('values', values)
+
         tempData.extlinks = [...values];
 
         extlinks.filter((item, index) => {
@@ -298,8 +261,6 @@ function UpdatePage() {
         });
         setFormValues({ ...tempData });
         setExtlinks([...extlinks]);
-        //console.log('tempData', tempData)
-
     }
 
     return (
@@ -307,83 +268,73 @@ function UpdatePage() {
             <Head title={'Update Animal'} />
             <Navigation />
 
-            {
-                (formValues && Object.keys(formValues).length > 0)
-                    ? <>
-                        <BackButton />
-
-                        <form>
-                            <Content>
-                                <HeadingCenter>
-                                    <Heading>Update Animal</Heading>
-                                </HeadingCenter>
-                                <UploadImage
-                                    setSelectedFile={setSelectedFile}
-                                    image={formValues.image}
-                                    isFilePicked={isFilePicked}
-                                    setIsFilePicked={setIsFilePicked}
-                                />
-
-
-                                <InputField
-                                    error={formErrors?.name ? true : false}
-                                    id="name"
-                                    label="Name"
-                                    helperText={formErrors?.name
-                                        ? formErrors.name
-                                        : null}
-                                    variant="filled"
-                                    onChange={(e) => handleChange(e, null)}
-                                    onBlur={(e) => checkForm(e, e.target.name)}
-                                    type="text"
-                                    name="name"
-                                    value={formValues?.name}
-                                />
-
-                                <InputField
-                                    error={formErrors.latinname ? true : false}
-                                    id="latinname"
-                                    label="Latin name"
-                                    value={formValues.latinname}
-                                    helperText={formErrors.latinname
-                                        ? formErrors.latinname
-                                        : null}
-                                    variant="filled"
-                                    onChange={(e) => handleChange(e, null)}
-                                    onBlur={(e) => checkForm(e, e.target.name)}
-                                    type="text"
-                                    name="latinname"
-                                />
-
-                                <InputField
-                                    id="description"
-                                    label="Description"
-                                    multiline
-                                    rows={7}
-                                    error={formErrors.description ? true : false}
-                                    variant="filled"
-                                    value={formValues.description}
-                                    helperText={formErrors.description
-                                        ? formErrors.description
-                                        : null}
-                                    onChange={(e) => handleChange(e, null)}
-                                    onBlur={(e) => checkForm(e, e.target.name)}
-                                    type="text"
-                                    name="description"
-                                />
-
-                                {formValues.extlinks.map((extlink, index) => {
-                                    //console.log(extlink);
-
-                                    return (<ExtlinkWrapper key={index}>
+            {formValues && Object.keys(formValues).length > 0 ? (
+                <>
+                    <BackButton />
+                    <form>
+                        <Content>
+                            <HeadingCenter>
+                                <Heading>Update Animal</Heading>
+                            </HeadingCenter>
+                            <UploadImage
+                                setSelectedFile={setSelectedFile}
+                                image={formValues.image}
+                                isFilePicked={isFilePicked}
+                                setIsFilePicked={setIsFilePicked}
+                            />
+                            <InputField
+                                error={formErrors?.name ? true : false}
+                                id="name"
+                                label="Name"
+                                helperText={formErrors?.name ? formErrors.name : null}
+                                variant="filled"
+                                onChange={(e) => handleChange(e, null)}
+                                onBlur={(e) => checkForm(e, e.target.name)}
+                                type="text"
+                                name="name"
+                                value={formValues?.name}
+                            />
+                            <InputField
+                                error={formErrors.latinname ? true : false}
+                                id="latinname"
+                                label="Latin name"
+                                value={formValues.latinname}
+                                helperText={formErrors.latinname ? formErrors.latinname : null}
+                                variant="filled"
+                                onChange={(e) => handleChange(e, null)}
+                                onBlur={(e) => checkForm(e, e.target.name)}
+                                type="text"
+                                name="latinname"
+                            />
+                            <InputField
+                                id="description"
+                                label="Description"
+                                multiline
+                                rows={7}
+                                error={formErrors.description ? true : false}
+                                variant="filled"
+                                value={formValues.description}
+                                helperText={formErrors.description ? formErrors.description : null}
+                                onChange={(e) => handleChange(e, null)}
+                                onBlur={(e) => checkForm(e, e.target.name)}
+                                type="text"
+                                name="description"
+                            />
+                            {formValues.extlinks.map((extlink, index) => {
+                                return (
+                                    <ExtlinkWrapper key={index}>
                                         <ExtlinkTextField
                                             error={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index] ? true : false) : false}
                                             id="external-url-link"
                                             label="External url link"
                                             value={extlink.link}
-                                            helperText={formErrors.hasOwnProperty('extlinks') ? (formErrors?.extlinks[index]
-                                                ? formErrors?.extlinks[index]
-                                                : null) : null}
+                                            helperText={
+                                                formErrors.hasOwnProperty('extlinks')
+                                                    ? formErrors?.extlinks[index]
+                                                        ? formErrors?.extlinks[index]
+                                                        : null
+                                                    : null
+                                            }
                                             variant="filled"
                                             onChange={(e) => handleChange(e, index)}
                                             onBlur={(e) => checkForm(e, e.target.name)}
@@ -391,40 +342,29 @@ function UpdatePage() {
                                             name={`extlinks`}
                                         />
 
-                                        <ExtlinkRemoveButton
-                                            aria-label="add"
-                                            onClick={() => removeExtlink(index)}
-                                            color="secondary"
-                                        >
+                                        <ExtlinkRemoveButton aria-label="add" onClick={() => removeExtlink(index)} color="secondary">
                                             <RemoveIcon />
                                         </ExtlinkRemoveButton>
                                     </ExtlinkWrapper>
-                                    )
-                                }
-                                )}
+                                );
+                            })}
 
-                                <Fab aria-label="remove" onClick={addNewExtlink} color="secondary">
-                                    <AddIcon />
-                                </Fab>
+                            <Fab aria-label="remove" onClick={addNewExtlink} color="secondary">
+                                <AddIcon />
+                            </Fab>
 
-                                <SubmitButton
-                                    variant="contained"
-                                    color="inherit"
-                                    onClick={(e) => handleSubmit(e)}
-                                    disabled={isSubmitting}
-                                >
-                                    Update Animal
-                                </SubmitButton>
-
-                            </Content>
-                        </form>
-                        <Footer />
-                    </>
-                    :
-                    <Content>
-                        <Spinner />
-                    </Content>
-            }
+                            <SubmitButton variant="contained" color="inherit" onClick={(e) => handleSubmit(e)} disabled={isSubmitting}>
+                                Update Animal
+                            </SubmitButton>
+                        </Content>
+                    </form>
+                    <Footer />
+                </>
+            ) : (
+                <Content>
+                    <Spinner />
+                </Content>
+            )}
         </>
     );
 }

@@ -5,4 +5,3 @@ export const SubmitButton = styled(Button)`
     width: 17rem;
     margin-top: 2rem !important;
 `;
-

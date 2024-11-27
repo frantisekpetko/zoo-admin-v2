@@ -1,9 +1,4 @@
-import {
-    useState,
-    useRef,
-    FC,
-    useEffect
-} from 'react';
+import { useState, useRef, FC, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
@@ -26,17 +21,9 @@ import { useStoreActions } from 'src/store';
 import { Formik, Form, useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import {
-    Add as AddIcon,
-    Remove as RemoveIcon
-} from '@mui/icons-material';
-import {
-    TextField,
-    Fab
-} from '@mui/material';
+import { Add as AddIcon, Remove as RemoveIcon } from '@mui/icons-material';
+import { TextField, Fab } from '@mui/material';
 import { isValidUrl } from 'src/tools/utils';
-
-
 
 const InputField = styled(TextField)`
     margin-bottom: 1rem !important;
@@ -56,10 +43,7 @@ const ExtlinkWrapper = styled.div`
     height: 100%;
 `;
 
-
-
 const CreatePage: FC = () => {
-
     const saveAnimal = useStoreActions((actions) => actions.animal.saveAnimal);
 
     const [extlinks, setExtlinks] = useState(['']);
@@ -75,18 +59,15 @@ const CreatePage: FC = () => {
     });
 
     const validationSchema = Yup.object().shape({
-        name: Yup.string()
-            .required('Required'),
-        latinname: Yup.string()
-            .required('Required'),
-        description: Yup.string()
-            .required('Required')
+        name: Yup.string().required('Required'),
+        latinname: Yup.string().required('Required'),
+        description: Yup.string().required('Required'),
     });
 
     const formik = useFormik({
         initialValues: { ...animalRef.current },
-        onSubmit: (values, errors) => { },
-        validationSchema: validationSchema
+        onSubmit: (values, errors) => {},
+        validationSchema: validationSchema,
     });
 
     const handleChange = (e, index) => {
@@ -94,9 +75,7 @@ const CreatePage: FC = () => {
 
         const data = [...extlinks];
         data[index] = value;
-        //console.error('data', data, index);
         setExtlinks([...data]);
-        //console.log('data after setState', extlinks, index);
     };
 
     const checkForm = (e) => {
@@ -113,22 +92,17 @@ const CreatePage: FC = () => {
         extlinks.forEach((item, index) => {
             if (!item) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
-                    errors[index] = "Required";
+                    errors[index] = 'Required';
                 }
             } else if (!isValidUrl(item)) {
                 if (!isCheckingForm || formFieldName === 'extlinks') {
-                    errors[index] = "Enter correct url";
+                    errors[index] = 'Enter correct url';
                 }
-
             }
         });
 
-        //console.error('errors', errors);
         return errors;
     };
-
-
-
 
     function addNewExtlink() {
         const tempExtlinks = [...extlinks];
@@ -138,14 +112,12 @@ const CreatePage: FC = () => {
 
     function removeExtlink(id) {
         const filteredItems = extlinks.filter((item, index) => {
-            const idx = extlinks.indexOf(item);
             return id !== index;
-        })
+        });
 
         setExtlinks(filteredItems);
         animalRef.current.extlinks = [...filteredItems];
     }
-
 
     const [width, setWidth] = useState<number>(window.innerWidth);
 
@@ -163,19 +135,15 @@ const CreatePage: FC = () => {
         };
     }, []);
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         formik.setSubmitting(true);
         formik.handleSubmit();
 
-
         const values = validate('extlinks');
         setExlinksErrors([...values]);
-
-
         const errs: any = formik.errors;
-        //console.log('saveAnimal', !(errs.length > 0), !(values.length > 0))
+
         if (!(values.length > 0) && !(errs?.length > 0)) {
             try {
                 let data: any = '';
@@ -183,158 +151,142 @@ const CreatePage: FC = () => {
                     const formData = new FormData();
                     formData.append('image', selectedFile);
                     formData.append('fileName', selectedFile.name);
-                    data = (await Ajax.post('animals/file', formData));
+                    data = await Ajax.post('animals/file', formData);
                 }
 
-                //console.log('saveAnimal', data?.data?.image)
                 await saveAnimal({ ...formik.values, extlinks, image: data?.data?.image !== undefined ? data?.data?.image : '' });
                 toast.success('You have successfully created new animal!', {
-                    position: "top-center",
+                    position: 'top-center',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
-                    theme: "colored",
+                    theme: 'colored',
                     icon: false,
-                    style: width < 480 ? { width: '97%' } : undefined
-
+                    style: width < 480 ? { width: '97%' } : undefined,
                 });
             } catch (error: any) {
                 const message = error.response.data.message;
                 console.log('errorMessage', message);
-                toast.error((
-                    <ToastErrorMessage message={message} />
-                ), {
-                    position: "top-center",
+                toast.error(<ToastErrorMessage message={message} />, {
+                    position: 'top-center',
                     autoClose: 5000,
                     hideProgressBar: false,
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
-                    theme: "colored",
+                    theme: 'colored',
                     icon: false,
-                    style: width < 480 ? { width: '97%' } : undefined
-
+                    style: width < 480 ? { width: '97%' } : undefined,
                 });
             }
         }
         formik.setSubmitting(false);
-
     };
 
     const [selectedFile, setSelectedFile] = useState<any>(null);
 
+    return (
+        <>
+            <Head title={'Create Animal'} />
 
-    return <>
-        <Head title={'Create Animal'} />
+            <Navigation />
+            <BackButton />
+            <Content>
+                <HeadingCenter>
+                    <Heading>Create Animal</Heading>
+                </HeadingCenter>
+                <UploadImage setSelectedFile={setSelectedFile} isFilePicked={isFilePicked} setIsFilePicked={setIsFilePicked} />
 
-        <Navigation />
-        <BackButton />
-        <Content>
-            <HeadingCenter>
-                <Heading>Create Animal</Heading>
-            </HeadingCenter>
-            <UploadImage
-                setSelectedFile={setSelectedFile}
-                isFilePicked={isFilePicked}
-                setIsFilePicked={setIsFilePicked}
+                <InputField
+                    error={formik.touched?.name && formik.errors?.name ? true : false}
+                    id="name"
+                    label="Name"
+                    value={formik.values?.name}
+                    helperText={formik.touched.name && formik.errors?.name ? formik.errors.name : null}
+                    variant="filled"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    type="text"
+                    name="name"
+                />
 
-            />
+                <InputField
+                    error={formik.touched.latinname && formik.errors.latinname ? true : false}
+                    id="latinname"
+                    label="Latin name"
+                    value={formik.values.latinname}
+                    helperText={formik.touched.latinname && formik.errors.latinname ? formik.errors.latinname : null}
+                    variant="filled"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    type="text"
+                    name="latinname"
+                />
 
-            <InputField
-                error={formik.touched?.name && formik.errors?.name ? true : false}
-                id="name"
-                label="Name"
-                value={formik.values?.name}
-                helperText={formik.touched.name && formik.errors?.name
-                    ? formik.errors.name
-                    : null}
-                variant="filled"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="text"
-                name="name"
-            />
+                <InputField
+                    id="description"
+                    label="Description"
+                    multiline
+                    rows={5}
+                    error={formik.touched.description && formik.errors.description ? true : false}
+                    variant="filled"
+                    value={formik.values.description}
+                    helperText={formik.touched.description && formik.errors.description ? formik.errors.description : null}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    type="text"
+                    name="description"
+                />
 
-            <InputField
-                error={formik.touched.latinname && formik.errors.latinname ? true : false}
-                id="latinname"
-                label="Latin name"
-                value={formik.values.latinname}
-                helperText={formik.touched.latinname && formik.errors.latinname
-                    ? formik.errors.latinname
-                    : null}
-                variant="filled"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="text"
-                name="latinname"
-            />
+                {extlinks?.map((extlink, index) => {
+                    return (
+                        <ExtlinkWrapper key={index}>
+                            <ExtlinkTextField
+                                error={true ? (extlinksErrors[index] ? true : false) : false}
+                                id="external-url-link"
+                                label="External url link"
+                                value={extlink}
+                                helperText={true ? (extlinksErrors[index] ? extlinksErrors[index] : null) : null}
+                                variant="filled"
+                                onChange={(e) => handleChange(e, index)}
+                                onBlur={(e) => checkForm(e)}
+                                type="text"
+                                name={`extlinks[${index}]`}
+                            />
 
-            <InputField
-                id="description"
-                label="Description"
-                multiline
-                rows={5}
-                error={formik.touched.description && formik.errors.description ? true : false}
-                variant="filled"
-                value={formik.values.description}
-                helperText={formik.touched.description && formik.errors.description
-                    ? formik.errors.description
-                    : null}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                type="text"
-                name="description"
-            />
-            {/*console.log('extlinks', extlinks)*/}
-            {extlinks?.map((extlink, index) => {
-                return (<ExtlinkWrapper key={index}>
-                    <ExtlinkTextField
-                        error={true ? (extlinksErrors[index] ? true : false) : false}
-                        id="external-url-link"
-                        label="External url link"
-                        value={extlink}
-                        helperText={true ? (extlinksErrors[index]
-                            ? extlinksErrors[index]
-                            : null) : null}
-                        variant="filled"
-                        onChange={(e) => handleChange(e, index)}
-                        onBlur={(e) => checkForm(e)}
-                        type="text"
-                        name={`extlinks[${index}]`}
-                    />
+                            <ExtlinkRemoveButton aria-label="add" onClick={() => removeExtlink(index)} color="secondary">
+                                <RemoveIcon />
+                            </ExtlinkRemoveButton>
+                        </ExtlinkWrapper>
+                    );
+                })}
 
-                    <ExtlinkRemoveButton
-                        aria-label="add"
-                        onClick={() => removeExtlink(index)}
-                        color="secondary"
-                    >
-                        <RemoveIcon />
-                    </ExtlinkRemoveButton>
-                </ExtlinkWrapper>)
-            }
-            )}
+                <Fab
+                    aria-label="remove"
+                    onClick={addNewExtlink}
+                    color="secondary"
+                    style={{ marginBottom: '1rem', minWidth: '4em', minHeight: '4em' }}
+                >
+                    <AddIcon />
+                </Fab>
 
-            <Fab aria-label="remove" onClick={addNewExtlink} color="secondary" style={{ marginBottom: '1rem', minWidth: '4em', minHeight: '4em' }}>
-                <AddIcon />
-            </Fab>
-
-            <SubmitButton
-                variant="contained"
-                disabled={formik.isSubmitting}
-                color="inherit"
-                type="submit"
-                onClick={async (e) => {
-                    handleSubmit(e);
-                }}>
-                Create Animal
-            </SubmitButton >
-        </Content>
-        <Footer />
-    </>
-        ;
-}
+                <SubmitButton
+                    variant="contained"
+                    disabled={formik.isSubmitting}
+                    color="inherit"
+                    type="submit"
+                    onClick={async (e) => {
+                        handleSubmit(e);
+                    }}
+                >
+                    Create Animal
+                </SubmitButton>
+            </Content>
+            <Footer />
+        </>
+    );
+};
 
 export default CreatePage;

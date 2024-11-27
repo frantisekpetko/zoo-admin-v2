@@ -1,7 +1,6 @@
-import { Action, createStore, createTypedHooks, Thunk } from 'easy-peasy';
+import { Action, Thunk } from 'easy-peasy';
 import { action, thunk } from 'easy-peasy';
 import Ajax from 'src/tools/Ajax';
-import { reactLocalStorage } from 'reactjs-localstorage';
 
 export interface UserRequest {
     username: string;
@@ -40,7 +39,7 @@ const user: UserModel = {
 
         const data = await Ajax.post('/auth/signin', payload, { signal: controller.signal });
 
-        return {data: data, controller: controller};
+        return { data: data, controller: controller };
     }),
     userLoading: false,
     setUserLoading: action((state, payload) => {
@@ -60,7 +59,6 @@ const user: UserModel = {
         sessionStorage.removeItem('accessToken');
     }),
     saveTokenToStorage: action((state, payload) => {
-       
         sessionStorage.setItem('accessToken', payload);
     }),
     logOut: action((state: any, actions) => {

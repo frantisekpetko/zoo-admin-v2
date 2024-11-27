@@ -2,8 +2,9 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
-import { Command, CommandArguments, _cli } from '@squareboat/nest-console';
+import { Command, _cli } from '@squareboat/nest-console';
 
 import * as fs from 'fs';
 import { resolve } from 'path';
@@ -15,17 +16,16 @@ import { User } from '../entity/user.entity';
 import * as bcrypt from 'bcrypt';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-//import wiki from 'wikijs';
 
 @Injectable()
 export class CommandsService {
+  private logger: Logger = new Logger(CommandsService.name);
+
   @Command('data', {
     desc: 'Get images from Internet',
     args: {},
   })
   async data() {
-    //await this.getImages();
-    //await this.createAnimalJSONfile();
     await this.deleteDataFromTables();
     await this.storeData();
     await this.createSeeds();
@@ -69,9 +69,9 @@ export class CommandsService {
 
     fs.mkdir(resolve('./frontend/public/images'), (err) => {
       if (err) {
-        return console.error(err);
+        return this.logger.error(err);
       }
-      console.log('Directory created successfully!');
+      this.logger.log('Directory created successfully!');
     });
 
     await Promise.all(
@@ -92,20 +92,19 @@ export class CommandsService {
             image: imageName,
           });
         } catch (error) {
-          console.error('Error:', error);
+          this.logger.error(`Error: ${error}`);
         }
       }),
     );
 
     fs.unlink('./src/data/seed/animals/images.json', function (err) {
       if (err) throw err;
-      // if no error, file has been deleted successfully
-      console.log('images.json deleted!');
+      Logger.log('images.json deleted!');
     });
 
     fs.open('./src/data/seed/animals/images.json', 'w', function (err, file) {
       if (err) throw err;
-      console.log('Saved!');
+      Logger.log('Saved!');
     });
 
     fs.writeFileSync(
@@ -138,7 +137,6 @@ export class CommandsService {
             wiki({ apiUrl: 'https://cz.wikipedia.org/w/api.php' })
               .page(data.name)
               .then(async (page) => {
-                //content = await page.content();
                 _cli.success('Inside Wiki');
                 content = await page.chain().summary().extlinks().request();
                 animalObj.push({
@@ -160,13 +158,13 @@ export class CommandsService {
                 );
               });
           } catch (e) {
-            console.error('Error: ', e);
+            this.logger.error(`Error: ${e}`);
           } finally {
           }
         }),
       );
     } catch (e) {
-      console.error(e);
+      this.logger.error(e);
     }
   }
 
@@ -176,8 +174,8 @@ export class CommandsService {
     const entities = conn.entityMetadatas;
 
     for (const entity of entities) {
-      const repository = conn.getRepository(entity.name); // Get repository
-      await repository.clear(); // Clear each entity table's content
+      const repository = conn.getRepository(entity.name);
+      await repository.clear();
     }
   }
 
@@ -191,7 +189,6 @@ export class CommandsService {
     );
     _cli.success(JSON.stringify(animalsObj));
     for (const _animal of animalsObj) {
-      //const index = animalsObj.indexOf(_animal);
       const animal = new Animal();
       animal.name = _animal.name;
       animal.latinname = _animal.latinname;
@@ -206,10 +203,7 @@ export class CommandsService {
         _cli.error(e);
       }
 
-      //await conn.manager.save(image);
-
       animal.images = [image];
-      //console.log(animal.images);
       animal.extlinks = [];
 
       for (const extlink of _animal.extlinks) {
@@ -221,11 +215,9 @@ export class CommandsService {
           _cli.error(e);
         }
 
-        //await conn.manager.save(extLink);
         animal.extlinks.push(extLink);
       }
-      //console.log(animal.extlinks);
-      //await conn.manager.save(animal);
+
       try {
         await animal.save();
       } catch (e: any) {

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 const Loader = styled.div`
     animation: ajax-spinner infinite 1.25s linear;
-    //background-color: rgba(39, 62, 84, 0.82);
     background-color: transparent;
     overflow: hidden;
 
@@ -14,8 +13,7 @@ const Loader = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #66FF00;
-
+    color: #66ff00;
 
     @keyframes ajax-spinner {
         0% {
@@ -61,28 +59,18 @@ const Loader = styled.div`
             overflow: hidden;
             z-index: 2;
         }
-
     }
-
 `;
 
 const MainContainer = styled.div`
-
     display: flex;
     background-color: transparent;
-`
+`;
 
 const Spinner = () => (
     <MainContainer>
-        <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-        >
-
-            <Loader className='ra ra-lion'></Loader>
-
+        <Grid container direction="column" justifyContent="center" alignItems="center">
+            <Loader className="ra ra-lion"></Loader>
         </Grid>
     </MainContainer>
 );

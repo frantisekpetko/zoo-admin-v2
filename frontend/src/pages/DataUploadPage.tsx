@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-import Head from '../components/Head';
+import Head from 'src/components/Head';
 import Navigation from '../components/common/Navigation';
 import Footer from '../components/common/Footer';
 import Content from '../components/common/Content';
@@ -21,11 +20,9 @@ function HomePage() {
             <Navigation />
 
             <Content>
-
                 <Button variant="outlined" color="success" onClick={() => sendData()}>
                     Upload App Data
                 </Button>
-
             </Content>
 
             <Footer />

@@ -14,25 +14,21 @@ export class UserRepository extends Repository<User> {
     const { username, password } = authCredentialsDto;
 
     const salt = await bcrypt.genSalt();
-    //commands.log(salt);
-
     const user = new User();
 
     user.username = username;
     user.salt = salt;
     user.password = await this.hashPassword(password, user.salt);
 
-    //commands.log(user.password);
     try {
       await user.save();
     } catch (error: any) {
       if (error.errno === 19) {
-        //duplicate username
+        // check for duplicate username
         throw new ConflictException('Username already exists');
       } else {
         throw new InternalServerErrorException();
       }
-      //commands.log(error);
     }
   }
 
@@ -40,10 +36,8 @@ export class UserRepository extends Repository<User> {
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<string> {
     const { username, password } = authCredentialsDto;
-    //commands.log(username, password);
     const user = await this.findOne({ username });
-    //commands.log('user', user);
-    //commands.log('user.validatePassword()', user.validatePassword(password));
+
     if (user && (await user.validatePassword(password))) {
       return user.username;
     } else {

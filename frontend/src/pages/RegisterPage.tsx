@@ -1,5 +1,5 @@
 import TextField from '@mui/material/TextField';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { Button, IconButton, InputAdornment } from '@mui/material';
@@ -27,7 +27,6 @@ const FormField = styled(TextField)`
     width: 100%;
 `;
 
-
 const RegisterPage: FC = (props: any) => {
     const signUp = useStoreActions((actions) => actions.user.signUp);
 
@@ -41,53 +40,40 @@ const RegisterPage: FC = (props: any) => {
     const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
     const submit = async () => {
-
         try {
             await signUp({ username, password });
 
             toast.success('You are registered!', {
-                position: "top-center",
+                position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                theme: "colored",
-                icon: false
-
+                theme: 'colored',
+                icon: false,
             });
-
         } catch (error: any) {
-            console.log(error.response.data);
-            console.log('errorMessage', JSON.parse(JSON.stringify(error.response.data.message.response.message)));
+            let errorMessage = { message: 'Unknown error' };
 
-            let errorMessage = {message: 'Unknown error'};
-
-            if (error.response.data.hasOwnProperty('errors'))
-            {
+            if (error.response.data.hasOwnProperty('errors')) {
                 errorMessage = error.response.data.errors;
             }
 
-            if (error.response.data.hasOwnProperty('message'))
-            {
+            if (error.response.data.hasOwnProperty('message')) {
                 errorMessage = error.response.data.message.response.message;
             }
 
-            //const errorMessage = error.response.data.message;
-            toast.error((
-                <ToastErrorMessage message={errorMessage} />
-            ), {
-                position: "top-center",
+            toast.error(<ToastErrorMessage message={errorMessage} />, {
+                position: 'top-center',
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
                 pauseOnHover: true,
                 draggable: true,
-                theme: "colored",
-                icon: false
-
+                theme: 'colored',
+                icon: false,
             });
-
         }
     };
 
@@ -102,21 +88,16 @@ const RegisterPage: FC = (props: any) => {
             <Content>
                 <FormContainer>
                     <Heading>User Registration</Heading>
-                    <FormField
-                        label="Username"
-                        margin="dense"
-                        variant="filled"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    />
+                    <FormField label="Username" margin="dense" variant="filled" value={username} onChange={(e) => setUsername(e.target.value)} />
                     <FormField
                         label="Password"
                         margin="dense"
                         variant="filled"
-                        type={showPassword ? "text" : "password"} 
+                        type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        InputProps={{ // <-- This is where the toggle button is added.
+                        InputProps={{
+                            // <-- This is where the toggle button is added.
                             endAdornment: (
                                 <InputAdornment position="end" sx={{ height: '1rem' }}>
                                     <IconButton
@@ -127,9 +108,8 @@ const RegisterPage: FC = (props: any) => {
                                         {showPassword ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
-                            )
+                            ),
                         }}
-            
                     />
                     <Button color="inherit" fullWidth onClick={submit}>
                         Register
