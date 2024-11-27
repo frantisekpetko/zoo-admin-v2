@@ -5,9 +5,6 @@
   "main": "index.js",
   "homepage": ".",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --mode production --progress --config  ./webpack.config.js",
-    "start": "cross-env NODE_ENV=development webpack serve --port 3000 --mode development --open --progress",
-    "build": "rimraf dist && cross-env NODE_ENV=production webpack --mode production --config webpack.config.js",
     "vite-dev": "vite",
     "vite-preview": "vite preview",
     "vite-build": "rimraf dist && vite build"
